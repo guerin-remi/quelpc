@@ -98,7 +98,7 @@
     display: flex; flex-direction: column; overflow: hidden;
     background: radial-gradient(circle at 100% 0, var(--green-soft) 0 88px, transparent 89px), var(--bg);
   }
-  .question-content { flex: 1; min-height: 0; overflow: hidden; display: flex; flex-direction: column; justify-content: safe center; }
+  .question-content { flex: 1; min-height: 0; overflow: hidden; display: flex; flex-direction: column; }
   .question-page .mascot-row { margin: clamp(7px, 1.6vh, 14px) 0 clamp(10px, 2vh, 18px); flex-shrink: 0; }
   .question-page .bubble {
     border-color: var(--green-border); background: var(--green-soft); color: var(--green-dark);
@@ -109,7 +109,7 @@
   .q-title::after { content: ""; display: block; width: 28px; height: 5px; border-radius: 9px; background: var(--green); margin-top: 7px; }
   .q-help { font-size: 13px; line-height: 1.35; color: var(--ink-soft); margin-bottom: clamp(10px, 2vh, 18px); flex-shrink: 0; }
 
-  .options { flex: 0 1 auto; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; padding: 1px 1px 4px; scrollbar-width: thin; }
+  .options { flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; justify-content: safe center; gap: 12px; padding: 1px 1px 4px; scrollbar-width: thin; }
   .option {
     display: flex; align-items: center; gap: 10px; text-align: left; flex-shrink: 0;
     background: var(--card); border: 2px solid var(--green-border); border-radius: 13px;
