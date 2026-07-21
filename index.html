@@ -35,7 +35,10 @@
   html { -webkit-text-size-adjust: 100%; }
   body {
     font-family: var(--font-body);
-    background: var(--bg);
+    background:
+      radial-gradient(circle at 8% 4%, rgba(249, 222, 139, .42) 0 70px, transparent 71px),
+      radial-gradient(circle at 96% 24%, rgba(116, 81, 214, .11) 0 92px, transparent 93px),
+      var(--bg);
     color: var(--ink);
     line-height: 1.55;
     min-height: 100dvh;
@@ -217,18 +220,39 @@
 
   .profile-banner {
     position: relative; overflow: hidden;
-    background: var(--green-dark); color: #fff;
-    border-radius: 20px; padding: 22px 118px 22px 20px; margin-bottom: 16px;
+    background: linear-gradient(135deg, var(--green-dark), var(--green)); color: #fff;
+    border-radius: 24px; padding: 24px 116px 24px 20px; margin-bottom: 14px;
+    box-shadow: 0 7px 0 #0A4B32;
   }
-  .pb-mascot { position: absolute; right: 8px; bottom: -4px; }
+  .profile-banner::before {
+    content: ""; position: absolute; width: 120px; height: 120px; border-radius: 50%;
+    right: -42px; top: -52px; background: rgba(255, 255, 255, .1);
+  }
+  .profile-banner::after {
+    content: ""; position: absolute; width: 24px; height: 24px; border-radius: 8px;
+    left: 18px; bottom: -14px; background: var(--amber); transform: rotate(18deg);
+  }
+  .pb-mascot { position: absolute; right: 5px; bottom: -4px; z-index: 1; }
   .profile-banner .pb-label {
     display: inline-flex; align-items: center; gap: 7px;
     font-size: 12.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em;
     color: #A9DCC2; margin-bottom: 8px;
   }
   .profile-banner .pb-label svg.ic { width: 15px; height: 15px; }
-  .profile-banner h2 { font-size: 28px; font-weight: 800; margin-bottom: 6px; }
-  .profile-banner p { font-size: 14px; color: #CDE9DA; max-width: 90%; }
+  .profile-banner h2 { font-size: 29px; font-weight: 800; margin-bottom: 7px; }
+  .profile-banner p { font-size: 14px; color: #E1F3E9; max-width: 95%; }
+
+  .quick-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 18px 0 14px; }
+  .quick-card {
+    min-height: 112px; padding: 14px; border: 2px solid transparent; border-radius: 18px;
+    display: flex; flex-direction: column; justify-content: space-between;
+  }
+  .quick-card:nth-child(4n+1) { background: var(--blue-soft); color: #24569F; transform: rotate(-1deg); }
+  .quick-card:nth-child(4n+2) { background: var(--coral-soft); color: #A53D20; transform: rotate(1deg); }
+  .quick-card:nth-child(4n+3) { background: var(--violet-soft); color: #5639A7; transform: rotate(.5deg); }
+  .quick-card:nth-child(4n+4) { background: var(--amber-soft); color: var(--amber-ink); transform: rotate(-.5deg); }
+  .quick-label { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .07em; opacity: .75; }
+  .quick-value { font-family: var(--font-title); font-size: 17px; font-weight: 800; line-height: 1.15; }
 
   .card {
     background: var(--card); border: 2px solid var(--line); border-radius: var(--radius);
@@ -255,6 +279,21 @@
   .notice.good { background: var(--green-soft); border: 2px solid #C3E2CE; color: var(--green-dark); }
   .notice strong { display: block; margin-bottom: 4px; font-size: 14.5px; font-family: var(--font-title); }
 
+  .drawer {
+    background: var(--card); border: 2px solid var(--line); border-radius: var(--radius);
+    margin-bottom: 12px; box-shadow: 0 3px 0 var(--line); overflow: hidden;
+  }
+  .drawer summary {
+    list-style: none; cursor: pointer; padding: 16px; display: flex; align-items: center; gap: 10px;
+    font-family: var(--font-title); font-size: 16px; font-weight: 800;
+  }
+  .drawer summary::-webkit-details-marker { display: none; }
+  .drawer summary svg.ic { color: var(--green); }
+  .drawer-toggle { margin-left: auto; color: var(--green); font-size: 24px; line-height: 1; transition: transform .2s; }
+  .drawer[open] .drawer-toggle { transform: rotate(45deg); }
+  .drawer-body { border-top: 2px solid var(--line); padding: 16px; }
+  .drawer-subtitle { font-size: 13px; color: var(--ink-soft); margin: 16px 0 4px; font-weight: 700; }
+
   .checklist { list-style: none; }
   .checklist li { display: flex; gap: 10px; padding: 7px 0; font-size: 14px; align-items: flex-start; }
   .checklist .cl-check {
@@ -263,19 +302,6 @@
     display: flex; align-items: center; justify-content: center;
   }
   .checklist .cl-check svg.ic { width: 11px; height: 11px; }
-
-  .picks-header { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 12px; }
-  .picks-header .card-title { margin-bottom: 0; }
-  .picks-date { font-size: 12px; color: var(--ink-soft); font-weight: 600; white-space: nowrap; }
-  .pick { border: 2px dashed var(--line); border-radius: 12px; padding: 13px 14px; margin-bottom: 10px; }
-  .pick:last-child { margin-bottom: 0; }
-  .pick-name { font-weight: 700; font-size: 14.5px; }
-  .pick-meta { font-size: 13px; color: var(--ink-soft); margin-top: 2px; }
-  .pick-tag {
-    display: inline-block; font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em;
-    background: var(--amber-soft); color: var(--amber-ink); border-radius: 6px; padding: 2px 8px; margin-bottom: 6px;
-  }
-  .pick-link { display: inline-block; margin-top: 6px; font-size: 13px; font-weight: 700; color: var(--green-dark); }
 
   /* ---------- Vérificateur de modèle (Icecat) ---------- */
   .verify-intro { font-size: 13.5px; color: var(--ink-soft); margin-bottom: 12px; }
@@ -346,6 +372,12 @@
   }
 
   .result-actions { margin-top: 6px; }
+  .result-actions .btn { margin-top: 12px; }
+  .small-actions { display: flex; justify-content: center; gap: 18px; margin-top: 16px; }
+  .small-actions button {
+    background: none; border: none; color: var(--ink-soft); cursor: pointer;
+    font: 700 13px var(--font-body); text-decoration: underline; text-underline-offset: 3px;
+  }
   .toast {
     position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(8px);
     background: var(--ink); color: #fff; font-size: 14px; font-weight: 600;
@@ -686,38 +718,48 @@ const BUDGET_RANK = { b1: 1, b2: 2, b3: 3, b4: 4 };
 const BUDGET_LABEL = {
   b1: "moins de 500 €", b2: "500 à 800 €", b3: "800 à 1 200 €", b4: "plus de 1 200 €",
 };
+const BUDGET_CAP = {
+  b1: { band: 1, ram: 16, storageGo: 512, dedicatedGPU: false },
+  b2: { band: 1, ram: 16, storageGo: 512, dedicatedGPU: true },
+  b3: { band: 2, ram: 32, storageGo: 1000, dedicatedGPU: true },
+  b4: { band: 2, ram: 32, storageGo: 1000, dedicatedGPU: true },
+};
 
 function computeProfile(s) {
   const usage = s.usage || [];
 
-  // 1. Bande de puissance de base selon l'usage
+  // Besoin idéal, avant de le confronter au budget.
   const bandByUsage = { web: 0, media: 0, office: 1, photo: 2, gaming: 2 };
-  let band = Math.max(0, ...usage.map((u) => bandByUsage[u]));
-
-  // Besoin d'une carte graphique dédiée
-  const needsGPU = usage.includes("gaming");
+  let requestedBand = Math.max(0, ...usage.map((u) => bandByUsage[u]));
+  if (s.work === "heavy") requestedBand = Math.max(requestedBand, 2);
+  const wantsGaming = usage.includes("gaming");
   const heavyMedia = usage.includes("photo");
 
-  // 2. La façon de travailler module d'un cran
-  if (s.work === "heavy") band = Math.max(band, 2);
+  // Le budget plafonne réellement la fiche proposée.
+  const budgetCap = BUDGET_CAP[s.budget] || null;
+  const band = budgetCap ? Math.min(requestedBand, budgetCap.band) : requestedBand;
+  const dedicatedAffordable = !budgetCap || budgetCap.dedicatedGPU;
+  const needsGPU = wantsGaming && dedicatedAffordable;
+  const recommendsGPU = heavyMedia && dedicatedAffordable;
 
-  // Mémoire : base selon la bande, +1 cran si multitâche ou logiciels lourds
+  // Mémoire : assez pour l'usage, sans dépasser ce que l'enveloppe permet.
   const ramLadder = [8, 16, 32];
   let ramIdx = band >= 2 ? 1 : 0;
   if (s.work === "multi" || s.work === "heavy") ramIdx = Math.min(ramIdx + 1, 2);
-  const ram = ramLadder[ramIdx];
+  if (wantsGaming || heavyMedia) ramIdx = Math.max(ramIdx, 1);
+  const ram = Math.min(ramLadder[ramIdx], budgetCap ? budgetCap.ram : 32);
 
-  // Stockage : SSD obligatoire, taille selon usage
-  let storage = "SSD de 256 Go minimum";
   let storageGo = 256;
-  if (band >= 1) { storage = "SSD de 512 Go"; storageGo = 512; }
-  if (heavyMedia || usage.includes("gaming")) { storage = "SSD de 1 To"; storageGo = 1000; }
+  if (band >= 1) storageGo = 512;
+  if (heavyMedia || wantsGaming) storageGo = 1000;
+  if (budgetCap) storageGo = Math.min(storageGo, budgetCap.storageGo);
+  const storage = storageGo >= 1000 ? "SSD de 1 To" : "SSD de " + storageGo + " Go";
 
   // Processeur en langage clair
   const cpuByBand = [
-    { value: "Entrée de gamme récent", hint: "type Intel Core i3 / AMD Ryzen 3, ou équivalent, de moins de 2 ans" },
-    { value: "Milieu de gamme récent", hint: "type Intel Core i5 / AMD Ryzen 5, ou équivalent, de moins de 2 ans" },
-    { value: "Puissant et récent", hint: "type Intel Core i7 / AMD Ryzen 7, ou équivalent, de moins de 2 ans" },
+    { value: "Core i3 / Ryzen 3 récent", hint: "un modèle simple et récent suffit" },
+    { value: "Core i5 / Ryzen 5 récent", hint: "le meilleur équilibre prix et confort" },
+    { value: "Puce haute performance", hint: "une série H ou équivalente, pensée pour les tâches lourdes" },
   ];
   const cpu = cpuByBand[band];
 
@@ -732,58 +774,53 @@ function computeProfile(s) {
   if (s.plug === "noplug") battery = "Grande autonomie : il doit tenir une journée entière sans prise";
   if (s.plug === "plug" && s.mobility === "sometimes") battery = null;
 
-  // Budget recommandé (nos tranches) selon la bande et la carte graphique
-  let minBudget = band === 0 ? "b1" : band === 1 ? "b2" : "b3";
-  if (needsGPU) minBudget = "b3";
-  if (s.os === "apple" && BUDGET_RANK[minBudget] < 3) minBudget = "b3";
+  // Prix réaliste du besoin idéal, indépendamment du compromis affiché.
+  let minBudget = requestedBand === 0 ? "b1" : requestedBand === 1 ? "b2" : "b3";
+  if (wantsGaming) minBudget = "b2";
+  if (s.os === "apple") minBudget = "b4";
 
-  // Arbitrages honnêtes
+  // Un seul message d'arbitrage : court, concret, actionnable.
   const notices = [];
   const budgetKnown = s.budget && s.budget !== "b0";
+  const budgetConflict = budgetKnown && BUDGET_RANK[s.budget] < BUDGET_RANK[minBudget];
 
-  if (budgetKnown && BUDGET_RANK[s.budget] < BUDGET_RANK[minBudget]) {
-    if (s.os === "apple" && BUDGET_RANK[s.budget] < 3) {
+  if (budgetConflict) {
+    if (s.os === "apple") {
       notices.push({
         type: "warn",
-        title: "Parlons franchement du budget",
-        text: "Un Mac neuf dépasse généralement votre budget. Deux options honnêtes : un MacBook reconditionné auprès d'un vendeur sérieux avec garantie, ou un ordinateur Windows équivalent qui rentre dans votre enveloppe.",
+        title: "Le neuf dépasse votre budget",
+        text: "Pour rester dans votre enveloppe : MacBook reconditionné avec garantie, ou PC Windows neuf. La fiche ci-dessous vise le choix réaliste.",
       });
-    } else if (needsGPU) {
+    } else if (wantsGaming && s.budget === "b1") {
       notices.push({
         type: "warn",
-        title: "Parlons franchement du budget",
-        text: "Pour jouer confortablement à des jeux récents, votre budget actuel sera juste. Trois options : viser " + BUDGET_LABEL[minBudget] + ", regarder le reconditionné, ou accepter de jouer avec des réglages graphiques réduits.",
+        title: "Sous 500 €, on joue malin",
+        text: "Pas de fausse promesse : un PC neuf équilibré avec une carte graphique dédiée n'est pas réaliste. Cette fiche vise les jeux légers ; pour les jeux récents, regardez l'occasion ou passez à 500–800 €.",
       });
     } else {
       notices.push({
         type: "warn",
-        title: "Parlons franchement du budget",
-        text: "Pour vos usages, le confort se trouve plutôt dans la tranche " + BUDGET_LABEL[minBudget] + ". Avec votre budget, c'est possible, mais il faudra faire des compromis (machine plus lente ou reconditionné). On préfère vous le dire.",
+        title: "J'ai ajusté la recommandation",
+        text: "Le besoin idéal commence plutôt à " + BUDGET_LABEL[minBudget] + ". La fiche ci-dessous est le meilleur compromis réaliste dans votre budget.",
       });
     }
-  }
-
-  if (budgetKnown && BUDGET_RANK[s.budget] >= BUDGET_RANK[minBudget] + 2) {
+  } else if (budgetKnown && BUDGET_RANK[s.budget] >= BUDGET_RANK[minBudget] + 2) {
     notices.push({
       type: "good",
-      title: "Bonne nouvelle : pas besoin de dépenser autant",
-      text: "Pour vos usages, un ordinateur dans la tranche " + BUDGET_LABEL[minBudget] + " suffit largement. Dépenser plus n'apportera rien que vous remarquerez. Gardez la différence.",
+      title: "Bonne nouvelle : gardez la différence",
+      text: "Un ordinateur à " + BUDGET_LABEL[minBudget] + " couvre déjà vos besoins.",
     });
-  }
-
-  if (!budgetKnown) {
+  } else if (!budgetKnown) {
     notices.push({
       type: "good",
-      title: "Pour vous donner un ordre de grandeur",
-      text: "Le type d'ordinateur recommandé ici se trouve généralement dans la tranche " + BUDGET_LABEL[minBudget] + ". C'est un repère, pas une obligation.",
+      title: "Votre ordre de grandeur",
+      text: "Ce profil se trouve généralement autour de " + BUDGET_LABEL[minBudget] + ".",
     });
-  }
-
-  if (s.os === "apple" && needsGPU) {
+  } else if (s.os === "apple" && wantsGaming) {
     notices.push({
       type: "warn",
-      title: "Apple et les jeux vidéo",
-      text: "Beaucoup de jeux récents ne sortent pas sur Mac. Si les jeux sont votre priorité, un ordinateur Windows sera un choix plus sûr. Si le Mac est votre priorité, vérifiez que vos jeux y existent avant d'acheter.",
+      title: "Pour jouer, Windows reste plus simple",
+      text: "Avant de choisir un Mac, vérifiez que vos jeux existent bien sur macOS.",
     });
   }
 
@@ -804,8 +841,11 @@ function computeProfile(s) {
   const profileNames = [
     "L'essentiel du quotidien",
     "Le polyvalent fiable",
-    needsGPU ? "Le costaud, taillé pour le jeu" : "Le costaud, taillé pour créer",
+    wantsGaming ? "Le costaud, taillé pour le jeu" : "Le costaud, taillé pour créer",
   ];
+  const profileName = budgetConflict
+    ? (wantsGaming ? "Le joueur malin" : heavyMedia ? "Le créatif malin" : "Le compromis malin")
+    : wantsGaming && band === 1 ? "Le joueur équilibré" : profileNames[band];
 
   // Raisonnement transparent : chaque réponse → conséquence
   const usageLabels = usage.map((u) => QUESTIONS.usage.options.find((o) => o.id === u).label.toLowerCase());
@@ -814,7 +854,7 @@ function computeProfile(s) {
   const specs = [
     {
       name: "Processeur", value: cpu.value,
-      why: "Parce que vous avez répondu « " + usageLabels.join(" » et « ") + " ». " + cpu.hint + ".",
+      why: "Pour « " + usageLabels.join(" » et « ") + " », " + cpu.hint + ".",
     },
     {
       name: "Mémoire vive", value: ram + " Go",
@@ -829,10 +869,12 @@ function computeProfile(s) {
     },
     {
       name: "Carte graphique",
-      value: needsGPU ? "Dédiée (obligatoire)" : heavyMedia ? "Dédiée recommandée" : "Celle intégrée suffit",
+      value: needsGPU ? "Dédiée" : wantsGaming ? "Intégrée — jeux légers" : recommendsGPU ? "Dédiée recommandée" : "Celle intégrée suffit",
       why: needsGPU
-        ? "Les jeux récents en ont besoin. Sans elle, ça ne fonctionnera tout simplement pas bien."
-        : heavyMedia
+        ? "C'est le minimum réaliste pour les jeux récents."
+        : wantsGaming
+          ? "À ce budget, une carte dédiée ferait trop sacrifier le reste. Pour les jeux récents, visez l'occasion ou augmentez le budget."
+        : recommendsGPU
           ? "Pour le montage vidéo, elle accélère nettement le travail. Un vrai plus, sans être bloquant pour débuter."
           : "Pour vos usages, la puce graphique incluse dans le processeur fait très bien le travail. Économie assurée.",
     },
@@ -867,7 +909,7 @@ function computeProfile(s) {
   const checklist = [
     "La mémoire vive fait bien " + ram + " Go (parfois cachée dans la fiche technique sous « RAM »).",
     "Le stockage est un SSD, pas un « disque dur » — c'est écrit sur la fiche.",
-    "Le processeur date de moins de 2 ans (" + cpu.hint + ").",
+    "Le processeur correspond bien à ce niveau : " + cpu.value.toLowerCase() + ".",
   ];
   if (needsGPU) checklist.push("Une carte graphique dédiée est bien présente (NVIDIA ou AMD, mentionnée à part du processeur).");
   if (s.mobility !== "home") checklist.push("Le poids réel : " + mob.weight.toLowerCase() + ", vérifiez-le sur la fiche, pas sur la photo.");
@@ -880,11 +922,29 @@ function computeProfile(s) {
     ssd: true,
     storageGo: storageGo,
     cpuTier: band,                                   // 0, 1 ou 2 = niveau minimum
-    gpu: needsGPU ? "required" : heavyMedia ? "recommended" : "integrated",
+    gpu: needsGPU ? "required" : recommendsGPU ? "recommended" : "integrated",
     os: s.os === "apple" ? "mac" : "windows",
   };
 
-  return { name: profileNames[band], band, ram, storage, storageGo, cpu, needsGPU, specs, notices, checklist, minBudget, targets };
+  const highlights = [
+    { label: "Processeur", value: cpu.value },
+    { label: "Mémoire", value: ram + " Go" },
+    { label: "Stockage", value: storage },
+    wantsGaming
+      ? { label: "Jeux", value: needsGPU ? "Carte dédiée" : "Jeux légers seulement" }
+      : { label: "Format", value: mob.screen },
+  ];
+
+  return { name: profileName, band, ram, storage, storageGo, cpu, needsGPU, specs, notices, checklist, minBudget, targets, highlights, budgetConflict };
+}
+
+function engineSelfCheck() {
+  const cheapGamer = computeProfile({ usage: ["gaming"], work: "heavy", mobility: "home", os: "windows", budget: "b1" });
+  const regularGamer = computeProfile({ usage: ["gaming"], work: "solo", mobility: "home", os: "windows", budget: "b2" });
+  const simpleAndWide = computeProfile({ usage: ["web"], work: "solo", mobility: "home", os: "windows", budget: "b4" });
+  return cheapGamer.band === 1 && cheapGamer.ram === 16 && cheapGamer.storageGo === 512 && cheapGamer.targets.gpu === "integrated" && cheapGamer.budgetConflict
+    && regularGamer.targets.gpu === "required" && regularGamer.ram === 16 && !regularGamer.budgetConflict
+    && simpleAndWide.band === 0 && simpleAndWide.ram === 8;
 }
 
 /* ---------- Fiche mémo (texte partageable) ---------- */
@@ -903,27 +963,6 @@ function memoText(p) {
   ];
   return lines.join("\n");
 }
-
-/* ---------- Machines du moment (éditable) ----------
-   Sélection validée à la main, par bande de profil (0, 1, 2).
-   Pour publier une machine : passer placeholder à false et remplir
-   name / price / blurb, et si possible ean (active le bouton "Vérifier").
-   Le conseil de fond reste valable même sans aucune machine ici. */
-
-const MACHINES = {
-  0: [
-    { placeholder: true, name: "Machine validée à la main nº1", price: "", blurb: "Modèle vérifié par nos soins, avec prix constaté et raison du choix.", ean: "" },
-    { placeholder: true, name: "Machine validée à la main nº2", price: "", blurb: "Sélection datée et renouvelée — jamais de classement biaisé.", ean: "" },
-  ],
-  1: [
-    { placeholder: true, name: "Machine validée à la main nº1", price: "", blurb: "Modèle vérifié par nos soins, avec prix constaté et raison du choix.", ean: "" },
-    { placeholder: true, name: "Machine validée à la main nº2", price: "", blurb: "Sélection datée et renouvelée — jamais de classement biaisé.", ean: "" },
-  ],
-  2: [
-    { placeholder: true, name: "Machine validée à la main nº1", price: "", blurb: "Modèle vérifié par nos soins, avec prix constaté et raison du choix.", ean: "" },
-    { placeholder: true, name: "Machine validée à la main nº2", price: "", blurb: "Sélection datée et renouvelée — jamais de classement biaisé.", ean: "" },
-  ],
-};
 
 /* ---------- Source de données produit (Icecat) ----------
    Le brief : on se base sur l'identifiant (EAN/MPN), pas sur le texte
@@ -1025,6 +1064,12 @@ function compareToProfile(product, targets) {
         status: sp.gpuDedicated ? "ok" : "low",
         label: "Carte graphique",
         detail: sp.gpuDedicated ? "Carte dédiée présente — indispensable pour vous, c'est bon." : "Pas de carte dédiée — bloquant pour les jeux récents.",
+      });
+    } else if (targets.gpu === "recommended") {
+      lines.push({
+        status: sp.gpuDedicated ? "ok" : "low",
+        label: "Carte graphique",
+        detail: sp.gpuDedicated ? "Carte dédiée présente — un vrai plus pour vos créations." : "Graphique intégré — suffisant pour débuter, mais plus lent en montage.",
       });
     } else {
       lines.push({
@@ -1360,9 +1405,8 @@ function renderComputing() {
 
 function renderResult() {
   const p = computeProfile(state);
-  const today = new Date().toLocaleDateString("fr-FR", { month: "long", year: "numeric" });
   let riseIdx = 0;
-  const rise = () => `class="rise" style="animation-delay:${(riseIdx++) * 90}ms"`;
+  const rise = (cls) => `class="${cls || ""} rise" style="animation-delay:${(riseIdx++) * 90}ms"`;
 
   // Persistance : garder le profil, nettoyer la session, refléter l'URL partageable.
   saveLast(state);
@@ -1370,81 +1414,64 @@ function renderResult() {
   try { history.replaceState(null, "", "#r=" + encodeURIComponent(encodeState(state))); } catch (e) { /* file:// */ }
 
   const scanSupported = ("BarcodeDetector" in window) && !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
-  const picks = MACHINES[p.band] || [];
-  const picksHTML = picks.map((m) => m.placeholder ? `
-        <div class="pick">
-          <span class="pick-tag">Emplacement à compléter</span>
-          <div class="pick-name">${m.name}</div>
-          <div class="pick-meta">${m.blurb}</div>
-        </div>` : `
-        <div class="pick">
-          <div class="pick-name">${m.name}${m.price ? ` — ${m.price}` : ""}</div>
-          <div class="pick-meta">${m.blurb}</div>
-          ${m.ean ? `<a class="pick-link" href="#" data-ean="${m.ean}">${ic("target")} Vérifier ce modèle ↓</a>` : ""}
-        </div>`).join("");
 
   app.innerHTML = `
-    <div class="screen" style="padding-top:16px">
+    <div class="screen" style="padding-top:12px">
       <div class="profile-banner rise" style="animation-delay:0ms">
-        <span class="pb-label">${ic("spark")} Votre profil</span>
+        <span class="pb-label">${ic("spark")} Votre résultat</span>
         <h2>${p.name}</h2>
-        <p>Le type d'ordinateur qui correspond à ce que vous nous avez dit — et pourquoi, point par point.</p>
+        <p>${p.budgetConflict ? "J'ai adapté la fiche à votre budget, sans vous vendre du rêve." : "Voici les quatre choses à retenir pour bien choisir."}</p>
         <span class="pb-mascot mascot-pop">${mascot("up", 104)}</span>
       </div>
 
       ${p.notices.map((n) => `
         <div class="notice ${n.type} rise" style="animation-delay:${(++riseIdx) * 90}ms"><strong>${n.title}</strong>${n.text}</div>`).join("")}
 
-      <div ${rise()}>
-      <div class="card">
-        <div class="card-title"><span class="ct-icon t-green">${ic("compass")}</span><h3>Votre profil, point par point</h3></div>
-        ${p.specs.map((s) => `
-          <div class="spec">
-            <div class="spec-head"><span class="spec-name">${s.name}</span><span class="spec-value">${s.value}</span></div>
-            <p class="spec-why">${s.why}</p>
+      <div ${rise("quick-grid")}>
+        ${p.highlights.map((h) => `
+          <div class="quick-card">
+            <span class="quick-label">${h.label}</span>
+            <span class="quick-value">${h.value}</span>
           </div>`).join("")}
       </div>
-      </div>
 
-      <div ${rise()}>
-      <div class="card">
-        <div class="card-title"><span class="ct-icon t-blue">${ic("circleCheck")}</span><h3>À vérifier avant d'acheter</h3></div>
-        <ul class="checklist">${p.checklist.map((c) => `<li><span class="cl-check">${ic("check")}</span><span>${c}</span></li>`).join("")}</ul>
-      </div>
-      </div>
+      <details ${rise("drawer")}>
+        <summary>${ic("compass")} Comprendre ce résultat <span class="drawer-toggle" aria-hidden="true">+</span></summary>
+        <div class="drawer-body">
+          ${p.specs.map((s) => `
+            <div class="spec">
+              <div class="spec-head"><span class="spec-name">${s.name}</span><span class="spec-value">${s.value}</span></div>
+              <p class="spec-why">${s.why}</p>
+            </div>`).join("")}
+          <p class="drawer-subtitle">À vérifier avant d'acheter</p>
+          <ul class="checklist">${p.checklist.map((c) => `<li><span class="cl-check">${ic("check")}</span><span>${c}</span></li>`).join("")}</ul>
+        </div>
+      </details>
 
-      <div ${rise()}>
-      <div class="card">
-        <div class="card-title"><span class="ct-icon t-violet">${ic("target")}</span><h3>Un modèle en tête ? Je le vérifie</h3></div>
-        <p class="verify-intro">Vu un ordinateur en magasin ou en ligne ? Saisissez le code-barres (EAN) de la boîte : je compare ses caractéristiques réelles à votre profil.</p>
-        <div class="verify-form">
-          <input id="ean-input" inputmode="numeric" autocomplete="off" placeholder="Code-barres, ex. 3701234500018">
-          <div class="verify-btns">
-            ${scanSupported ? `<button class="btn secondary" id="scan-btn">${ic("camera")} Scanner</button>` : ""}
-            <button class="btn" id="verify-btn">Vérifier</button>
+      <details ${rise("drawer")}>
+        <summary>${ic("target")} Vérifier un ordinateur <span class="drawer-toggle" aria-hidden="true">+</span></summary>
+        <div class="drawer-body">
+          <p class="verify-intro">Saisissez le code-barres de la boîte et je compare le modèle à votre fiche.</p>
+          <div class="verify-form">
+            <input id="ean-input" inputmode="numeric" autocomplete="off" placeholder="Code-barres, ex. 3701234500018">
+            <div class="verify-btns">
+              ${scanSupported ? `<button class="btn secondary" id="scan-btn">${ic("camera")} Scanner</button>` : ""}
+              <button class="btn" id="verify-btn">Vérifier</button>
+            </div>
           </div>
+          <p class="verify-hint">Mode démo : ${DEMO_EANS.slice(0, 3).map((e) => `<code data-demo="${e}">${e}</code>`).join(" · ")}</p>
+          <div id="verify-out"></div>
         </div>
-        <p class="verify-hint">Essai (données de démonstration) : ${DEMO_EANS.slice(0, 3).map((e) => `<code data-demo="${e}">${e}</code>`).join(" · ")}</p>
-        <div id="verify-out"></div>
-      </div>
-      </div>
-
-      <div ${rise()}>
-      <div class="card">
-        <div class="picks-header">
-          <div class="card-title"><span class="ct-icon t-coral">${ic("bag")}</span><h3>Nos machines du moment</h3></div>
-          <span class="picks-date">Sélection de ${today}</span>
-        </div>
-        ${picksHTML}
-      </div>
-      </div>
+      </details>
 
       <div class="result-actions rise" style="animation-delay:${(++riseIdx) * 90}ms">
-        <button class="btn" id="share-link">${ic("share")} Partager mon profil</button>
-        <button class="btn secondary" id="save-memo">${ic("bag")} Enregistrer ma fiche pour le magasin</button>
-        <button class="btn secondary" id="restart">${ic("refresh")} Refaire le questionnaire</button>
+        <button class="btn" id="share-link">${ic("share")} Partager ce résultat</button>
+        <div class="small-actions">
+          <button id="save-memo">Enregistrer la fiche</button>
+          <button id="restart">Recommencer</button>
+        </div>
       </div>
-      <footer>QuelPC — conseil indépendant, nous ne vendons pas d'ordinateurs.<br>V1 · MVP rentrée 2026</footer>
+      <footer>QuelPC · Conseil indépendant · Aucun ordinateur à vendre</footer>
     </div>`;
 
   document.getElementById("restart").onclick = () => {
@@ -1464,9 +1491,6 @@ function renderResult() {
 
   app.querySelectorAll("code[data-demo]").forEach((c) => {
     c.onclick = () => { input.value = c.dataset.demo; runVerify(); };
-  });
-  app.querySelectorAll(".pick-link[data-ean]").forEach((a) => {
-    a.onclick = (e) => { e.preventDefault(); input.value = a.dataset.ean; input.scrollIntoView({ behavior: "smooth", block: "center" }); runVerify(); };
   });
 
   const scanBtn = document.getElementById("scan-btn");
@@ -1580,6 +1604,7 @@ function init() {
   render();
 }
 
+console.assert(engineSelfCheck(), "QuelPC : le budget inférieur à 500 € doit plafonner le profil joueur");
 init();
 </script>
 </body>
