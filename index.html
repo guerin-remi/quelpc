@@ -1,0 +1,1586 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Quel PC — Trouvez l'ordinateur qui vous correspond</title>
+<meta name="description" content="Répondez à 6 questions simples, sans jargon, et découvrez quel type d'ordinateur vous correspond vraiment. Conseil neutre : nous ne vendons rien.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #FBF6EE;
+    --card: #FFFFFF;
+    --ink: #23281E;
+    --ink-soft: #6D7268;
+    --green: #1B8A5A;
+    --green-dark: #0E5E3E;
+    --green-soft: #E4F3E9;
+    --coral: #E45C35;
+    --coral-soft: #FCE9E1;
+    --blue: #3670C9;
+    --blue-soft: #E6EEFA;
+    --violet: #7451D6;
+    --violet-soft: #EEE9FB;
+    --amber: #D98A1F;
+    --amber-soft: #FBF0DA;
+    --amber-ink: #6E5619;
+    --line: #E8E1D4;
+    --radius: 16px;
+    --font-title: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+    --font-body: "Inter", "Segoe UI", system-ui, sans-serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    font-family: var(--font-body);
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.55;
+    min-height: 100dvh;
+  }
+  #app {
+    max-width: 480px;
+    margin: 0 auto;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    padding: 20px 20px calc(28px + env(safe-area-inset-bottom));
+  }
+  h1, h2, h3 { font-family: var(--font-title); line-height: 1.12; letter-spacing: -0.01em; }
+
+  /* Set d'icônes maison "duotone contour" : trait épais arrondi
+     + remplissage translucide de la même couleur. */
+  svg.ic {
+    width: 22px; height: 22px; flex-shrink: 0; display: block;
+    stroke: currentColor; stroke-width: 2; fill: none;
+    stroke-linecap: round; stroke-linejoin: round;
+  }
+  svg.ic .d { fill: currentColor; fill-opacity: .16; }
+  svg.ic .f { fill: currentColor; fill-opacity: 1; stroke: none; }
+
+  /* Teintes par option */
+  .t-green  { background: var(--green-soft);  color: var(--green); }
+  .t-coral  { background: var(--coral-soft);  color: var(--coral); }
+  .t-blue   { background: var(--blue-soft);   color: var(--blue); }
+  .t-violet { background: var(--violet-soft); color: var(--violet); }
+  .t-amber  { background: var(--amber-soft);  color: var(--amber); }
+
+  /* ---------- Barre de progression ---------- */
+  .topbar { display: flex; align-items: center; gap: 12px; min-height: 40px; margin-bottom: 6px; }
+  .back-btn {
+    background: none; border: none; cursor: pointer;
+    font-family: var(--font-body); font-size: 14px; font-weight: 600;
+    color: var(--ink-soft); padding: 8px 10px 8px 0; display: flex; align-items: center; gap: 2px;
+  }
+  .back-btn:hover { color: var(--ink); }
+  .back-btn svg.ic { width: 16px; height: 16px; }
+  .progress-segs { flex: 1; display: flex; gap: 5px; }
+  .seg { flex: 1; height: 7px; border-radius: 99px; background: var(--line); transition: background .3s; }
+  .seg.done { background: var(--green); }
+  .seg.now { background: var(--green); opacity: .45; }
+  .step-count { font-size: 12.5px; font-weight: 700; color: var(--ink-soft); white-space: nowrap; font-variant-numeric: tabular-nums; }
+
+  /* ---------- Écrans ---------- */
+  .screen { flex: 1; display: flex; flex-direction: column; animation: slideIn .3s ease; }
+  @keyframes slideIn { from { opacity: 0; transform: translateX(14px); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) {
+    .screen, .rise, .opt-check, .float, .mascot-pop { animation: none !important; }
+  }
+
+  .q-title { font-size: 26px; font-weight: 800; margin-bottom: 8px; }
+  .q-help { font-size: 15px; color: var(--ink-soft); margin-bottom: 22px; }
+
+  .options { display: flex; flex-direction: column; gap: 11px; }
+  .option {
+    display: flex; align-items: center; gap: 13px; text-align: left;
+    background: var(--card); border: 2px solid var(--line); border-radius: var(--radius);
+    padding: 13px 15px; cursor: pointer; width: 100%;
+    box-shadow: 0 3px 0 var(--line);
+    font-family: var(--font-body); font-size: 16px; color: var(--ink);
+    transition: border-color .15s, box-shadow .1s, transform .1s;
+  }
+  .option:active { transform: translateY(3px); box-shadow: 0 0 0 var(--line); }
+  .option.selected { border-color: var(--green); box-shadow: 0 3px 0 var(--green); }
+  .option.selected:active { box-shadow: 0 0 0 var(--green); }
+  .opt-icon {
+    width: 44px; height: 44px; border-radius: 13px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    transition: transform .2s cubic-bezier(.2, 1.4, .5, 1);
+  }
+  .option.selected .opt-icon { transform: rotate(-6deg) scale(1.08); }
+  .opt-text { flex: 1; min-width: 0; }
+  .opt-label { font-weight: 700; display: block; font-size: 15.5px; }
+  .opt-sub { font-size: 13px; color: var(--ink-soft); display: block; margin-top: 1px; }
+  .opt-check {
+    width: 24px; height: 24px; border-radius: 50%; flex-shrink: 0;
+    background: var(--green); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; transform: scale(.4);
+  }
+  .opt-check svg.ic { width: 13px; height: 13px; }
+  .option.selected .opt-check { opacity: 1; animation: checkPop .3s cubic-bezier(.2, 1.6, .5, 1) forwards; }
+  @keyframes checkPop { from { transform: scale(.4); } to { transform: scale(1); } }
+
+  .btn {
+    display: flex; align-items: center; justify-content: center; gap: 9px; width: 100%;
+    background: var(--green); color: #fff; border: none; cursor: pointer;
+    font-family: var(--font-title); font-size: 17px; font-weight: 800;
+    padding: 15px 20px; border-radius: var(--radius); margin-top: 22px;
+    box-shadow: 0 4px 0 var(--green-dark);
+    transition: transform .1s, box-shadow .1s, background .15s;
+  }
+  .btn:hover { background: #1F9963; }
+  .btn:active { transform: translateY(4px); box-shadow: 0 0 0 var(--green-dark); }
+  .btn:disabled { background: var(--line); color: var(--ink-soft); box-shadow: 0 4px 0 #D9D1C1; cursor: not-allowed; }
+  .btn.secondary {
+    background: var(--card); color: var(--green-dark);
+    border: 2px solid var(--green); box-shadow: 0 3px 0 var(--green);
+    margin-top: 10px; font-weight: 700;
+  }
+  .btn.secondary:hover { background: var(--green-soft); }
+  .btn.secondary:active { transform: translateY(3px); box-shadow: 0 0 0 var(--green); }
+  .btn svg.ic { width: 19px; height: 19px; }
+
+  /* ---------- Accueil ---------- */
+  .hero { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 24px 0; }
+  .logo { display: flex; align-items: center; gap: 9px; margin-bottom: 30px; }
+  .logo-mark {
+    width: 34px; height: 34px; border-radius: 10px; background: var(--green); color: #fff;
+    display: flex; align-items: center; justify-content: center; transform: rotate(-4deg);
+  }
+  .logo-mark svg.ic { width: 20px; height: 20px; }
+  .logo-name { font-family: var(--font-title); font-weight: 800; font-size: 20px; color: var(--ink); }
+  .logo-name span { color: var(--green); }
+
+  /* ---------- Mascotte ---------- */
+  .mascot { display: block; }
+  .float { animation: float 3.2s ease-in-out infinite; }
+  @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+  .mascot-pop { animation: mascotPop .45s cubic-bezier(.2, 1.4, .5, 1) backwards; }
+  @keyframes mascotPop { from { opacity: 0; transform: scale(.6) rotate(-6deg); } }
+  .mascot-row { display: flex; align-items: center; gap: 13px; margin-bottom: 18px; }
+  .mascot-row .mascot-wrap { flex-shrink: 0; }
+  .bubble {
+    position: relative; background: var(--card);
+    border: 2px solid var(--line); border-radius: 14px;
+    padding: 10px 14px; font-size: 14px; font-weight: 600; color: var(--ink);
+    box-shadow: 0 3px 0 var(--line);
+  }
+  .bubble::before {
+    content: ""; position: absolute; left: -8px; top: 50%; margin-top: -7px;
+    width: 12px; height: 12px; background: var(--card);
+    border-left: 2px solid var(--line); border-bottom: 2px solid var(--line);
+    transform: rotate(45deg);
+  }
+
+  .hero h1 { font-size: 35px; font-weight: 800; margin-bottom: 13px; }
+  .hero h1 em {
+    font-style: normal;
+    background: linear-gradient(transparent 58%, #F9DE8B 58%);
+    padding: 0 2px;
+  }
+  .hero p.lead { font-size: 16.5px; color: var(--ink-soft); margin-bottom: 28px; }
+  .pillars { display: flex; flex-direction: column; gap: 15px; margin-bottom: 32px; }
+  .pillar { display: flex; gap: 13px; align-items: center; }
+  .pillar-icon {
+    width: 40px; height: 40px; border-radius: 12px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .pillar strong { display: block; font-size: 15px; }
+  .pillar span.sub { font-size: 13.5px; color: var(--ink-soft); }
+  .hero-footnote { text-align: center; font-size: 13px; color: var(--ink-soft); margin-top: 14px; }
+
+  /* ---------- Écran de préparation ---------- */
+  .computing { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+  .computing .mascot-stage { display: flex; justify-content: center; margin-bottom: 16px; }
+  .computing h2 { font-size: 24px; font-weight: 800; text-align: center; margin-bottom: 30px; }
+  .compute-steps { display: flex; flex-direction: column; gap: 15px; max-width: 320px; margin: 0 auto; width: 100%; }
+  .compute-step { display: flex; align-items: center; gap: 12px; font-size: 15px; font-weight: 500; color: var(--ink-soft); opacity: .3; transition: opacity .3s, color .3s; }
+  .compute-step.active { opacity: 1; }
+  .compute-step.done { opacity: 1; color: var(--ink); }
+  .compute-bullet {
+    width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
+    border: 2.5px solid var(--line); background: var(--card);
+    display: flex; align-items: center; justify-content: center; color: #fff;
+    transition: background .25s, border-color .25s, transform .25s;
+  }
+  .compute-step.active .compute-bullet { border-color: var(--green); }
+  .compute-step.done .compute-bullet { background: var(--green); border-color: var(--green); transform: scale(1.1); }
+  .compute-bullet svg.ic { width: 14px; height: 14px; opacity: 0; transition: opacity .2s; }
+  .compute-step.done .compute-bullet svg.ic { opacity: 1; }
+
+  /* ---------- Résultat ---------- */
+  .rise { animation: rise .45s ease backwards; }
+  @keyframes rise { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+
+  .profile-banner {
+    position: relative; overflow: hidden;
+    background: var(--green-dark); color: #fff;
+    border-radius: 20px; padding: 22px 118px 22px 20px; margin-bottom: 16px;
+  }
+  .pb-mascot { position: absolute; right: 8px; bottom: -4px; }
+  .profile-banner .pb-label {
+    display: inline-flex; align-items: center; gap: 7px;
+    font-size: 12.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em;
+    color: #A9DCC2; margin-bottom: 8px;
+  }
+  .profile-banner .pb-label svg.ic { width: 15px; height: 15px; }
+  .profile-banner h2 { font-size: 28px; font-weight: 800; margin-bottom: 6px; }
+  .profile-banner p { font-size: 14px; color: #CDE9DA; max-width: 90%; }
+
+  .card {
+    background: var(--card); border: 2px solid var(--line); border-radius: var(--radius);
+    padding: 18px; margin-bottom: 14px; box-shadow: 0 3px 0 var(--line);
+  }
+  .card-title { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .card-title .ct-icon {
+    width: 32px; height: 32px; border-radius: 9px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .card-title .ct-icon svg.ic { width: 18px; height: 18px; }
+  .card-title h3 { font-size: 17px; font-weight: 800; }
+
+  .spec { padding: 11px 0; border-bottom: 1px solid var(--line); }
+  .spec:last-child { border-bottom: none; padding-bottom: 0; }
+  .spec:first-of-type { padding-top: 0; }
+  .spec-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+  .spec-name { font-size: 12.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--ink-soft); }
+  .spec-value { font-size: 15px; font-weight: 700; color: var(--green-dark); text-align: right; }
+  .spec-why { font-size: 13.5px; color: var(--ink-soft); margin-top: 4px; }
+
+  .notice { border-radius: var(--radius); padding: 15px 16px; margin-bottom: 14px; font-size: 14px; }
+  .notice.warn { background: var(--amber-soft); border: 2px solid #EBD9AE; color: var(--amber-ink); }
+  .notice.good { background: var(--green-soft); border: 2px solid #C3E2CE; color: var(--green-dark); }
+  .notice strong { display: block; margin-bottom: 4px; font-size: 14.5px; font-family: var(--font-title); }
+
+  .checklist { list-style: none; }
+  .checklist li { display: flex; gap: 10px; padding: 7px 0; font-size: 14px; align-items: flex-start; }
+  .checklist .cl-check {
+    width: 19px; height: 19px; border-radius: 50%; flex-shrink: 0; margin-top: 1px;
+    background: var(--green-soft); color: var(--green);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .checklist .cl-check svg.ic { width: 11px; height: 11px; }
+
+  .picks-header { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .picks-header .card-title { margin-bottom: 0; }
+  .picks-date { font-size: 12px; color: var(--ink-soft); font-weight: 600; white-space: nowrap; }
+  .pick { border: 2px dashed var(--line); border-radius: 12px; padding: 13px 14px; margin-bottom: 10px; }
+  .pick:last-child { margin-bottom: 0; }
+  .pick-name { font-weight: 700; font-size: 14.5px; }
+  .pick-meta { font-size: 13px; color: var(--ink-soft); margin-top: 2px; }
+  .pick-tag {
+    display: inline-block; font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em;
+    background: var(--amber-soft); color: var(--amber-ink); border-radius: 6px; padding: 2px 8px; margin-bottom: 6px;
+  }
+  .pick-link { display: inline-block; margin-top: 6px; font-size: 13px; font-weight: 700; color: var(--green-dark); }
+
+  /* ---------- Vérificateur de modèle (Icecat) ---------- */
+  .verify-intro { font-size: 13.5px; color: var(--ink-soft); margin-bottom: 12px; }
+  .verify-form input {
+    width: 100%; font-family: var(--font-body); font-size: 16px; color: var(--ink);
+    background: var(--bg); border: 2px solid var(--line); border-radius: 12px; padding: 12px 14px; outline: none;
+    letter-spacing: .03em;
+  }
+  .verify-form input:focus { border-color: var(--green); background: #fff; }
+  .verify-btns { display: flex; gap: 10px; margin-top: 10px; }
+  .verify-btns .btn { margin-top: 0; padding: 12px 16px; font-size: 15px; flex: 1; }
+  .verify-hint { font-size: 12.5px; color: var(--ink-soft); margin-top: 10px; }
+  .verify-hint code {
+    font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 12px; cursor: pointer;
+    background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 1px 6px; color: var(--green-dark);
+  }
+  #verify-out { margin-top: 14px; }
+  #verify-out .mascot-row { margin: 4px 0 0; }
+  .verify-product { font-size: 14px; margin-bottom: 6px; }
+  .verify-caution { font-size: 12.5px; color: var(--ink-soft); }
+  .v-list { list-style: none; margin-top: 4px; }
+  .v-list li { display: flex; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--line); font-size: 13.5px; align-items: flex-start; }
+  .v-list li:last-child { border-bottom: none; }
+  .v-dot {
+    width: 20px; height: 20px; border-radius: 50%; flex-shrink: 0; margin-top: 1px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .v-dot svg.ic { width: 12px; height: 12px; }
+  .v-ok .v-dot { background: var(--green-soft); color: var(--green); }
+  .v-low .v-dot { background: var(--coral-soft); color: var(--coral); }
+  .v-unk .v-dot { background: var(--line); color: var(--ink-soft); }
+  .v-list strong { display: block; font-size: 13.5px; }
+  .v-list .v-txt { color: var(--ink-soft); }
+  .notice.neutral { background: #F1EDE4; border: 2px solid var(--line); color: #55604F; }
+
+  /* ---------- Reprise de session (accueil) ---------- */
+  .resume {
+    background: var(--card); border: 2px solid var(--green-border); border-radius: var(--radius);
+    padding: 14px 16px; margin-bottom: 18px; box-shadow: 0 3px 0 var(--green-border);
+  }
+  .resume-top { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 15px; margin-bottom: 4px; }
+  .resume-top svg.ic { width: 18px; height: 18px; color: var(--green-dark); }
+  .resume p { font-size: 13.5px; color: var(--ink-soft); margin-bottom: 12px; }
+  .resume-actions { display: flex; gap: 10px; }
+  .resume-actions button {
+    flex: 1; font-family: var(--font-title); font-weight: 700; font-size: 14px; cursor: pointer;
+    border-radius: 11px; padding: 10px; border: none;
+  }
+  .resume-actions .r-go { background: var(--green); color: #fff; }
+  .resume-actions .r-new { background: var(--bg); color: var(--ink-soft); border: 2px solid var(--line); }
+
+  /* ---------- Scanner code-barres ---------- */
+  .scan-overlay {
+    position: fixed; inset: 0; z-index: 30; background: rgba(20, 24, 18, .92);
+    display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px;
+  }
+  .scan-overlay video { width: 100%; max-width: 420px; border-radius: 16px; background: #000; }
+  .scan-frame { position: relative; width: 100%; max-width: 420px; }
+  .scan-line {
+    position: absolute; left: 6%; right: 6%; top: 50%; height: 3px; background: var(--coral);
+    box-shadow: 0 0 12px var(--coral); border-radius: 2px; animation: scanMove 1.8s ease-in-out infinite;
+  }
+  @keyframes scanMove { 0%, 100% { top: 22%; } 50% { top: 78%; } }
+  .scan-hint { color: #fff; font-size: 14.5px; font-weight: 600; text-align: center; margin: 18px 0; max-width: 320px; }
+  .scan-close {
+    background: #fff; color: var(--ink); border: none; cursor: pointer;
+    font-family: var(--font-title); font-weight: 700; font-size: 15px; padding: 12px 26px; border-radius: 99px;
+  }
+
+  .result-actions { margin-top: 6px; }
+  .toast {
+    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(8px);
+    background: var(--ink); color: #fff; font-size: 14px; font-weight: 600;
+    padding: 11px 20px; border-radius: 99px; opacity: 0; pointer-events: none; transition: all .25s;
+    white-space: nowrap; z-index: 10;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  footer { text-align: center; font-size: 12.5px; color: var(--ink-soft); padding-top: 26px; }
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div class="toast" id="toast"></div>
+
+<script>
+"use strict";
+
+/* =====================================================
+   QUEL PC — V1
+   Questionnaire (6 questions, 1 par écran, branchement
+   conditionnel), moteur de recommandation, écran de
+   préparation, fiche profil de sortie.
+   ===================================================== */
+
+/* ---------- Icônes maison ----------
+   Set "duotone contour" dessiné pour ce projet : trait épais
+   arrondi + remplissage translucide (classe .d), aplats pleins
+   ponctuels (classe .f). Pas de bibliothèque. */
+
+const ICONS = {
+  globe: '<circle class="d" cx="12" cy="12" r="8.6"/><ellipse cx="12" cy="12" rx="3.6" ry="8.6"/><path d="M3.4 12h17.2"/>',
+  gradcap: '<path class="d" d="M12 4 2.6 8.4 12 12.8l9.4-4.4z"/><path class="d" d="M6.8 10.8v3.9c0 1.5 2.3 2.9 5.2 2.9s5.2-1.4 5.2-2.9v-3.9"/><path d="M21.4 9v4.8"/><circle class="f" cx="21.4" cy="15.6" r="1.2"/>',
+  camera: '<path class="d" d="M3 9.2A2.2 2.2 0 0 1 5.2 7h2l1.2-1.8c.3-.5.8-.7 1.3-.7h4.6c.5 0 1 .2 1.3.7L16.8 7h2A2.2 2.2 0 0 1 21 9.2v8.6a2.2 2.2 0 0 1-2.2 2.2H5.2A2.2 2.2 0 0 1 3 17.8z"/><circle cx="12" cy="13.4" r="3.4"/><circle class="f" cx="17.6" cy="10" r=".9"/>',
+  gamepad: '<path class="d" d="M7 6.4h10a5.5 5.5 0 0 1 5.4 6.6l-.8 3.9a3.2 3.2 0 0 1-5.6 1.4l-1.5-2h-4.9l-1.5 2a3.2 3.2 0 0 1-5.6-1.4l-.8-3.9A5.5 5.5 0 0 1 7 6.4z"/><path d="M8 10v4M6 12h4"/><circle class="f" cx="15.3" cy="13.2" r="1.1"/><circle class="f" cx="17.7" cy="10.8" r="1.1"/>',
+  tv: '<rect class="d" x="3" y="6.4" width="18" height="12.6" rx="2.6"/><path d="m9 2.6 3 3 3-3"/><path class="f" d="M10.6 9.6v6.2l5.2-3.1z"/>',
+  target: '<circle class="d" cx="12" cy="12" r="8.6"/><circle cx="12" cy="12" r="4.9"/><circle class="f" cx="12" cy="12" r="1.7"/>',
+  windows: '<rect x="3" y="3" width="12.2" height="10.4" rx="2"/><rect class="d" x="8.8" y="9.6" width="12.2" height="10.4" rx="2"/><path d="M11.6 13h6.6"/>',
+  bolt: '<path class="d" d="M13.8 2.2 4.4 13.7a.6.6 0 0 0 .5 1h4.7l-.9 6.9c-.1.6.7 1 1.1.5l9.4-11.5a.6.6 0 0 0-.5-1H14l.9-6.9c.1-.6-.7-1-1.1-.5z"/>',
+  home: '<path class="d" d="m3.4 10.2 7.6-6.4a1.6 1.6 0 0 1 2 0l7.6 6.4a1.6 1.6 0 0 1 .6 1.2v7.5c0 .9-.7 1.6-1.6 1.6H4.4c-.9 0-1.6-.7-1.6-1.6v-7.5c0-.5.2-.9.6-1.2z"/><path d="M9.8 20.5v-4.3a2.2 2.2 0 0 1 4.4 0v4.3"/>',
+  suitcase: '<rect class="d" x="3" y="7.2" width="18" height="12.8" rx="2.6"/><path d="M9 7V5.6A1.6 1.6 0 0 1 10.6 4h2.8A1.6 1.6 0 0 1 15 5.6V7M8.2 10.8v5.6M15.8 10.8v5.6"/>',
+  backpack: '<path class="d" d="M7 8.4a5 5 0 0 1 10 0V19a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2z"/><path d="M9.6 5.4V4.2c0-.7.5-1.2 1.2-1.2h2.4c.7 0 1.2.5 1.2 1.2v1.2M9 10.4h6"/><path d="M9.2 14.6h5.6v2.9a1 1 0 0 1-1 1h-3.6a1 1 0 0 1-1-1z"/>',
+  plug: '<path class="d" d="M5.6 7.6h12.8v4.2a5.4 5.4 0 0 1-5.4 5.4h-2a5.4 5.4 0 0 1-5.4-5.4z"/><path d="M8.3 2.8v4.4M15.7 2.8v4.4M12 17.4v3.8"/>',
+  battery: '<rect class="d" x="2.2" y="7.6" width="17" height="9.2" rx="2.4"/><path d="M21.8 10.6v3.4"/><rect class="f" x="5" y="10.3" width="2.7" height="3.8" rx=".8"/><rect class="f" x="9.3" y="10.3" width="2.7" height="3.8" rx=".8"/>',
+  apple: '<path class="d" d="M12 20.9c1.5 0 2.8 1.1 4 1.1 3 0 6-8 6-12.2A4.9 4.9 0 0 0 17 5c-2.2 0-4 1.4-5 2-1-.6-2.8-2-5-2a4.9 4.9 0 0 0-5 4.8C2 14 5 22 8 22c1.3 0 2.5-1.1 4-1.1z"/><path d="M12 7c0-3 1-4.5 2.5-5.5"/>',
+  shrug: '<circle class="d" cx="12" cy="12" r="8.8"/><path d="M9.5 9.3a2.5 2.5 0 0 1 4.9.5c0 1.7-2.4 2.1-2.4 3.5"/><circle class="f" cx="12" cy="16.6" r="1.2"/>',
+  coin: '<circle class="d" cx="12" cy="12" r="8.8"/><path d="M15.3 8.9A4.3 4.3 0 0 0 8.7 12a4.3 4.3 0 0 0 6.6 3.1M6.6 10.8h4.6M6.6 13.2h3.6"/>',
+  check: '<path d="M20 6.5 9.5 17 4 11.5" stroke-width="3"/>',
+  chevronLeft: '<path d="m14.5 18-6-6 6-6" stroke-width="2.6"/>',
+  compass: '<circle class="d" cx="12" cy="12" r="8.8"/><path class="f" d="m15.7 8.3-1.9 5.5-5.5 1.9 1.9-5.5z"/>',
+  circleCheck: '<circle class="d" cx="12" cy="12" r="8.8"/><path d="m8.2 12.3 2.6 2.6 5-5.3"/>',
+  bag: '<path class="d" d="M5.8 7.8 7 4.4c.2-.7.9-1.2 1.6-1.2h6.8c.7 0 1.4.5 1.6 1.2l1.2 3.4v10.4a2.6 2.6 0 0 1-2.6 2.6H8.4a2.6 2.6 0 0 1-2.6-2.6z"/><path d="M5.8 7.8h12.4M9.4 10.8a2.6 2.6 0 0 0 5.2 0"/>',
+  share: '<circle class="d" cx="18" cy="5.2" r="2.8"/><circle class="d" cx="6" cy="12" r="2.8"/><circle class="d" cx="18" cy="18.8" r="2.8"/><path d="m8.6 13.3 6.8 4.1M15.4 6.6l-6.8 4"/>',
+  refresh: '<path d="M3.2 12a8.8 8.8 0 0 1 15.4-5.8L21 8.4M21 3.2v5.2h-5.2M20.8 12a8.8 8.8 0 0 1-15.4 5.8L3 15.6M3 20.8v-5.2h5.2" stroke-width="2.2"/>',
+  shield: '<path class="d" d="M12 2.3 4.6 5.1a1 1 0 0 0-.7 1C4 11.6 5.1 18.4 11.6 21.5a1 1 0 0 0 .8 0C19 18.4 20.1 11.6 20.1 6a1 1 0 0 0-.7-.9z"/><path d="m8.7 12 2.3 2.3 4.3-4.5"/>',
+  bubble: '<path class="d" d="M12 3a8.6 8.6 0 0 0-7.4 13L3 21l5.2-1.5A8.6 8.6 0 1 0 12 3z"/><circle class="f" cx="8.4" cy="12" r="1.1"/><circle class="f" cx="12" cy="12" r="1.1"/><circle class="f" cx="15.6" cy="12" r="1.1"/>',
+  clock: '<circle class="d" cx="12" cy="12" r="8.8"/><path d="M12 7.2V12l3.2 1.9"/>',
+  laptop: '<path class="d" d="M4.6 5.8A1.8 1.8 0 0 1 6.4 4h11.2a1.8 1.8 0 0 1 1.8 1.8v8.8H4.6z"/><path class="d" d="m3.1 17.5.7-2.9h16.4l.7 2.9a1.3 1.3 0 0 1-1.3 1.6H4.4a1.3 1.3 0 0 1-1.3-1.6z"/>',
+  spark: '<path class="d" d="M12 2.8c.5 4.7 2.7 7.2 7.3 7.8v2.8c-4.6.6-6.8 3.1-7.3 7.8h-.2c-.5-4.7-2.7-7.2-7.3-7.8v-2.8c4.6-.6 6.8-3.1 7.3-7.8z"/>',
+};
+
+function ic(name, cls) {
+  return '<svg class="ic ' + (cls || "") + '" viewBox="0 0 24 24" aria-hidden="true">' + ICONS[name] + "</svg>";
+}
+
+/* ---------- Puce, la mascotte ----------
+   Un petit portable personnifié, dessiné pour ce projet.
+   Chaque pose combine une position de bras, un regard et
+   une bouche. Rendu en SVG pur, aucune image externe. */
+
+const MASCOT_INK = "#23281E";
+const MASCOT_ARM = "#0E5E3E";
+
+const MASCOT_POSES = {
+  wave:  { armL: "M28 52 Q17 58 15 67", handL: [15, 69], armR: "M92 48 Q105 39 107 25", handR: [107, 23], eyes: "normal", mouth: "smile" },
+  open:  { armL: "M28 50 Q15 55 11 63", handL: [11, 65], armR: "M92 50 Q105 55 109 63", handR: [109, 65], eyes: "wide",   mouth: "oh" },
+  up:    { armL: "M28 48 Q15 38 13 24", handL: [13, 22], armR: "M92 48 Q105 38 107 24", handR: [107, 22], eyes: "joy",    mouth: "grin", sparks: true },
+  think: { armL: "M28 52 Q17 58 15 67", handL: [15, 69], armR: "M92 54 Q103 66 88 67",  handR: [86, 65],  eyes: "updots", mouth: "hmm" },
+  coin:  { armL: "M28 52 Q17 58 15 67", handL: [15, 69], armR: "M92 50 Q104 48 107 42", handR: [107, 40], eyes: "normal", mouth: "smile", coin: true },
+  point: { armL: "M28 52 Q17 58 15 67", handL: [15, 69], armR: "M92 48 Q104 44 112 42", handR: [112, 42], eyes: "normal", mouth: "smile" },
+};
+
+const MASCOT_EYES = {
+  normal: '<circle cx="48" cy="40" r="3.6" fill="' + MASCOT_INK + '"/><circle cx="72" cy="40" r="3.6" fill="' + MASCOT_INK + '"/><circle cx="49.2" cy="38.8" r="1.1" fill="#fff"/><circle cx="73.2" cy="38.8" r="1.1" fill="#fff"/>',
+  wide:   '<circle cx="48" cy="40" r="4.4" fill="' + MASCOT_INK + '"/><circle cx="72" cy="40" r="4.4" fill="' + MASCOT_INK + '"/><circle cx="49.4" cy="38.4" r="1.3" fill="#fff"/><circle cx="73.4" cy="38.4" r="1.3" fill="#fff"/>',
+  joy:    '<path d="M44 41 Q48 36 52 41 M68 41 Q72 36 76 41" stroke="' + MASCOT_INK + '" stroke-width="2.6" fill="none" stroke-linecap="round"/>',
+  updots: '<circle cx="48" cy="37" r="3.2" fill="' + MASCOT_INK + '"/><circle cx="72" cy="37" r="3.2" fill="' + MASCOT_INK + '"/><circle cx="49" cy="35.8" r="1" fill="#fff"/><circle cx="73" cy="35.8" r="1" fill="#fff"/>',
+};
+
+const MASCOT_MOUTHS = {
+  smile: '<path d="M52 49 Q60 56 68 49" stroke="' + MASCOT_INK + '" stroke-width="2.5" fill="none" stroke-linecap="round"/>',
+  oh:    '<ellipse cx="60" cy="51" rx="3.8" ry="4.6" fill="' + MASCOT_INK + '"/>',
+  grin:  '<path d="M50 47 Q60 59 70 47Z" fill="' + MASCOT_INK + '"/>',
+  hmm:   '<path d="M53 50 L67 48" stroke="' + MASCOT_INK + '" stroke-width="2.5" fill="none" stroke-linecap="round"/>',
+};
+
+function mascot(pose, size, cls) {
+  const p = MASCOT_POSES[pose] || MASCOT_POSES.wave;
+  size = size || 96;
+  const arm = (d) => '<path d="' + d + '" stroke="' + MASCOT_ARM + '" stroke-width="7" fill="none" stroke-linecap="round"/>';
+  const hand = (xy) => '<circle cx="' + xy[0] + '" cy="' + xy[1] + '" r="5.5" fill="' + MASCOT_ARM + '"/>';
+  return '<svg class="mascot ' + (cls || "") + '" width="' + size + '" height="' + Math.round(size * 0.8) + '" viewBox="0 0 120 96" aria-hidden="true">'
+    + (p.sparks
+      ? '<g stroke-width="2.4" fill="none" stroke-linecap="round">'
+        + '<path d="M24 12h7M27.5 8.5v7" stroke="#E45C35"/>'
+        + '<path d="M90 6h7M93.5 2.5v7" stroke="#D98A1F"/>'
+        + '<path d="M111 52h6M114 49v6" stroke="#7451D6"/>'
+        + "</g>"
+      : "")
+    + arm(p.armL) + hand(p.handL)
+    + arm(p.armR) + hand(p.handR)
+    + (p.coin ? '<circle cx="107" cy="30" r="8" fill="#D98A1F"/><circle cx="107" cy="30" r="4.8" fill="none" stroke="#FFF9EF" stroke-width="1.6"/>' : "")
+    + '<path d="M60 16 V7" stroke="' + MASCOT_ARM + '" stroke-width="3" stroke-linecap="round"/>'
+    + '<circle cx="60" cy="5.5" r="3.6" fill="#E45C35"/>'
+    + '<rect x="26" y="16" width="68" height="54" rx="12" fill="#1B8A5A"/>'
+    + '<rect x="33" y="23" width="54" height="40" rx="7" fill="#FFF9EF"/>'
+    + MASCOT_EYES[p.eyes]
+    + '<circle cx="43" cy="47" r="3" fill="#F4BFA8" opacity=".85"/><circle cx="77" cy="47" r="3" fill="#F4BFA8" opacity=".85"/>'
+    + MASCOT_MOUTHS[p.mouth]
+    + '<rect x="20" y="72" width="80" height="11" rx="5.5" fill="' + MASCOT_ARM + '"/>'
+    + '<rect x="36" y="85" width="13" height="7" rx="3.5" fill="' + MASCOT_ARM + '"/>'
+    + '<rect x="71" y="85" width="13" height="7" rx="3.5" fill="' + MASCOT_ARM + '"/>'
+    + "</svg>";
+}
+
+/* Pose et petite phrase de Puce pour chaque question */
+const MASCOT_BY_QUESTION = {
+  usage:    { pose: "open",  quip: "On commence par la plus importante !" },
+  work:     { pose: "up",    quip: "Là, soyez honnête avec moi…" },
+  mobility: { pose: "wave",  quip: "On avance bien !" },
+  plug:     { pose: "point", quip: "Question bonus, promis c'est la seule." },
+  os:       { pose: "think", quip: "Presque fini, plus que deux." },
+  budget:   { pose: "coin",  quip: "Dernière question !" },
+};
+
+/* Réaction de Puce quand on choisit une réponse (single-select).
+   Clé par réponse, sinon réaction par défaut. Donne de la vie. */
+const MASCOT_DEFAULT_REACTION = { pose: "up", quip: "Bien reçu, on continue !" };
+const MASCOT_REACTIONS = {
+  work: {
+    solo:  { pose: "wave",  quip: "Simple et efficace, j'aime." },
+    multi: { pose: "up",    quip: "Ah, une équipe de choc à onglets ! Je note plus de mémoire." },
+    heavy: { pose: "up",    quip: "Du lourd ! On vise costaud alors." },
+  },
+  mobility: {
+    home:      { pose: "wave", quip: "Tranquille à la maison, parfait." },
+    sometimes: { pose: "wave", quip: "Un peu nomade, ça marche." },
+    daily:     { pose: "up",   quip: "Toujours dans le sac : léger, ce sera." },
+  },
+  plug: {
+    plug:   { pose: "wave", quip: "Une prise pas loin, pas de souci." },
+    noplug: { pose: "up",   quip: "Loin des prises : je muscle la batterie." },
+  },
+  os: {
+    windows: { pose: "wave",  quip: "Windows, terrain connu." },
+    apple:   { pose: "up",    quip: "L'univers Apple, joli choix." },
+    any:     { pose: "think", quip: "Pas d'avis ? Je vous prends par la main." },
+  },
+  budget: {
+    b1: { pose: "coin", quip: "Compris, on joue serré et malin." },
+    b2: { pose: "coin", quip: "Bon budget pour du solide." },
+    b3: { pose: "coin", quip: "De la marge, on va bien vous servir." },
+    b4: { pose: "up",   quip: "Large ! On vise le confort." },
+    b0: { pose: "think", quip: "Pas de souci, je vous donne un ordre d'idée." },
+  },
+};
+
+/* ---------- Définition des questions ---------- */
+
+const QUESTIONS = {
+  usage: {
+    title: "Que ferez-vous avec cet ordinateur ?",
+    help: "Choisissez 1 ou 2 réponses, celles qui comptent le plus.",
+    multi: true,
+    max: 2,
+    options: [
+      { id: "web",    icon: "globe",   tint: "t-blue",   label: "Internet, mails et démarches", sub: "Naviguer, écrire des mails, payer ses impôts" },
+      { id: "office", icon: "gradcap", tint: "t-violet", label: "Travail de bureau ou études", sub: "Documents, tableurs, cours, visioconférence" },
+      { id: "photo",  icon: "camera",  tint: "t-coral",  label: "Photo ou montage vidéo", sub: "Retoucher des photos, monter des vidéos" },
+      { id: "gaming", icon: "gamepad", tint: "t-green",  label: "Jeux vidéo", sub: "Jouer à des jeux récents" },
+      { id: "media",  icon: "tv",      tint: "t-amber",  label: "Films, séries et musique", sub: "Regarder des vidéos, écouter de la musique" },
+    ],
+  },
+  work: {
+    title: "Quand vous êtes sur un ordinateur, vous êtes plutôt…",
+    help: "Soyez honnête, il n'y a pas de bonne réponse. Cela nous aide à calibrer la mémoire.",
+    options: [
+      { id: "solo",  icon: "target",  tint: "t-blue",   label: "Une chose à la fois", sub: "Une fenêtre ouverte, rarement plus" },
+      { id: "multi", icon: "windows", tint: "t-violet", label: "Plein de choses en même temps", sub: "Beaucoup d'onglets et de fenêtres ouverts en permanence" },
+      { id: "heavy", icon: "bolt",    tint: "t-coral",  label: "Des logiciels costauds", sub: "Montage, modélisation, gros fichiers…" },
+    ],
+  },
+  mobility: {
+    title: "Cet ordinateur va-t-il voyager ?",
+    help: "Cela décide de la taille de l'écran et du poids.",
+    options: [
+      { id: "home",      icon: "home",     tint: "t-amber", label: "Il restera à la maison", sub: "Toujours au même endroit" },
+      { id: "sometimes", icon: "suitcase", tint: "t-blue",  label: "Transporté de temps en temps", sub: "Quelques déplacements, week-ends, vacances" },
+      { id: "daily",     icon: "backpack", tint: "t-coral", label: "Transporté presque tous les jours", sub: "Cours, bureau, bibliothèque…" },
+    ],
+  },
+  plug: {
+    title: "En déplacement, avez-vous une prise à portée de main ?",
+    help: "Cela décide de l'importance de l'autonomie.",
+    condition: (s) => s.mobility === "sometimes" || s.mobility === "daily",
+    options: [
+      { id: "plug",   icon: "plug",    tint: "t-amber", label: "Oui, la plupart du temps", sub: "Je peux brancher l'ordinateur facilement" },
+      { id: "noplug", icon: "battery", tint: "t-green", label: "Non, souvent loin d'une prise", sub: "Il doit tenir la journée sur batterie" },
+    ],
+  },
+  os: {
+    title: "Aujourd'hui, vous êtes plutôt habitué·e à…",
+    help: "Il n'y a pas de mauvais choix, juste des habitudes à respecter.",
+    options: [
+      { id: "windows", icon: "windows", tint: "t-blue",   label: "Windows", sub: "Un PC classique, au travail ou à la maison" },
+      { id: "apple",   icon: "apple",   tint: "t-violet", label: "L'univers Apple", sub: "iPhone, iPad ou Mac" },
+      { id: "any",     icon: "shrug",   tint: "t-amber",  label: "Aucune idée, peu importe", sub: "Conseillez-moi ce qui est le plus simple" },
+    ],
+  },
+  budget: {
+    title: "Quel budget avez-vous en tête ?",
+    help: "C'est notre ancre de réalité. Si ça coince, on vous le dira honnêtement.",
+    options: [
+      { id: "b1", icon: "coin",  tint: "t-green", label: "Moins de 500 €", sub: "" },
+      { id: "b2", icon: "coin",  tint: "t-blue",  label: "Entre 500 et 800 €", sub: "" },
+      { id: "b3", icon: "coin",  tint: "t-violet", label: "Entre 800 et 1 200 €", sub: "" },
+      { id: "b4", icon: "coin",  tint: "t-coral", label: "Plus de 1 200 €", sub: "" },
+      { id: "b0", icon: "shrug", tint: "t-amber", label: "Je ne sais pas encore", sub: "On vous donnera un ordre de grandeur" },
+    ],
+  },
+};
+
+const ORDER = ["usage", "work", "mobility", "plug", "os", "budget"];
+
+/* ---------- Encodage de l'état (lien partageable) ----------
+   Un char par réponse, segments séparés par "." dans l'ORDRE.
+   Ex. state {usage:[web,office], work:solo, mobility:home, os:windows, budget:b2}
+   → "wo.a.h..w.2" : court, lisible, sûr dans une URL. */
+
+const CODEC = {
+  usage:    { web: "w", office: "o", photo: "p", gaming: "g", media: "m" },
+  work:     { solo: "a", multi: "b", heavy: "c" },
+  mobility: { home: "h", sometimes: "s", daily: "d" },
+  plug:     { plug: "p", noplug: "n" },
+  os:       { windows: "w", apple: "a", any: "x" },
+  budget:   { b1: "1", b2: "2", b3: "3", b4: "4", b0: "0" },
+};
+const DECODE = {};
+for (const field in CODEC) {
+  DECODE[field] = {};
+  for (const k in CODEC[field]) DECODE[field][CODEC[field][k]] = k;
+}
+
+function encodeState(s) {
+  return [
+    (s.usage || []).map((u) => CODEC.usage[u] || "").join(""),
+    CODEC.work[s.work] || "",
+    CODEC.mobility[s.mobility] || "",
+    CODEC.plug[s.plug] || "",
+    CODEC.os[s.os] || "",
+    CODEC.budget[s.budget] || "",
+  ].join(".");
+}
+
+function decodeState(str) {
+  const parts = String(str || "").split(".");
+  if (parts.length < 6) return null;
+  const s = {};
+  const usage = parts[0].split("").map((c) => DECODE.usage[c]).filter(Boolean);
+  if (usage.length) s.usage = usage;
+  if (DECODE.work[parts[1]]) s.work = DECODE.work[parts[1]];
+  if (DECODE.mobility[parts[2]]) s.mobility = DECODE.mobility[parts[2]];
+  if (DECODE.plug[parts[3]]) s.plug = DECODE.plug[parts[3]];
+  if (DECODE.os[parts[4]]) s.os = DECODE.os[parts[4]];
+  if (DECODE.budget[parts[5]]) s.budget = DECODE.budget[parts[5]];
+  return s;
+}
+
+// Un profil est "complet" quand toutes les réponses requises sont là.
+function isComplete(s) {
+  if (!s || !s.usage || !s.usage.length) return false;
+  if (!s.work || !s.mobility || !s.os || !s.budget) return false;
+  const plugNeeded = QUESTIONS.plug.condition(s);
+  if (plugNeeded && !s.plug) return false;
+  return true;
+}
+
+function profileLink(s) {
+  return location.origin + location.pathname + "#r=" + encodeURIComponent(encodeState(s));
+}
+
+/* ---------- Persistance (reprise de session) ---------- */
+
+const LS_SESSION = "quelpc.session"; // questionnaire en cours
+const LS_LAST = "quelpc.last";       // dernier profil terminé
+
+function saveSession() {
+  try { localStorage.setItem(LS_SESSION, JSON.stringify({ state, currentStep })); } catch (e) { /* stockage indispo */ }
+}
+function loadSession() {
+  try { return JSON.parse(localStorage.getItem(LS_SESSION) || "null"); } catch (e) { return null; }
+}
+function clearSession() {
+  try { localStorage.removeItem(LS_SESSION); } catch (e) { /* stockage indispo */ }
+}
+function saveLast(s) {
+  try { localStorage.setItem(LS_LAST, encodeState(s)); } catch (e) { /* stockage indispo */ }
+}
+function loadLast() {
+  try {
+    const code = localStorage.getItem(LS_LAST);
+    if (!code) return null;
+    const s = decodeState(code);
+    return isComplete(s) ? s : null;
+  } catch (e) { return null; }
+}
+
+/* ---------- État ---------- */
+
+let state = {};
+let screen = "home"; // home | question | computing | result
+let currentStep = 0;
+
+function activeSteps() {
+  return ORDER.filter((id) => {
+    const q = QUESTIONS[id];
+    return !q.condition || q.condition(state);
+  });
+}
+
+/* ---------- Moteur de recommandation ----------
+   L'usage fixe une bande de puissance (0, 1, 2).
+   La façon de travailler la module d'un cran.
+   Le budget plafonne ; en cas de conflit, on affiche
+   l'arbitrage honnêtement au lieu de mentir.        */
+
+const BUDGET_RANK = { b1: 1, b2: 2, b3: 3, b4: 4 };
+const BUDGET_LABEL = {
+  b1: "moins de 500 €", b2: "500 à 800 €", b3: "800 à 1 200 €", b4: "plus de 1 200 €",
+};
+
+function computeProfile(s) {
+  const usage = s.usage || [];
+
+  // 1. Bande de puissance de base selon l'usage
+  const bandByUsage = { web: 0, media: 0, office: 1, photo: 2, gaming: 2 };
+  let band = Math.max(0, ...usage.map((u) => bandByUsage[u]));
+
+  // Besoin d'une carte graphique dédiée
+  const needsGPU = usage.includes("gaming");
+  const heavyMedia = usage.includes("photo");
+
+  // 2. La façon de travailler module d'un cran
+  if (s.work === "heavy") band = Math.max(band, 2);
+
+  // Mémoire : base selon la bande, +1 cran si multitâche ou logiciels lourds
+  const ramLadder = [8, 16, 32];
+  let ramIdx = band >= 2 ? 1 : 0;
+  if (s.work === "multi" || s.work === "heavy") ramIdx = Math.min(ramIdx + 1, 2);
+  const ram = ramLadder[ramIdx];
+
+  // Stockage : SSD obligatoire, taille selon usage
+  let storage = "SSD de 256 Go minimum";
+  let storageGo = 256;
+  if (band >= 1) { storage = "SSD de 512 Go"; storageGo = 512; }
+  if (heavyMedia || usage.includes("gaming")) { storage = "SSD de 1 To"; storageGo = 1000; }
+
+  // Processeur en langage clair
+  const cpuByBand = [
+    { value: "Entrée de gamme récent", hint: "type Intel Core i3 / AMD Ryzen 3, ou équivalent, de moins de 2 ans" },
+    { value: "Milieu de gamme récent", hint: "type Intel Core i5 / AMD Ryzen 5, ou équivalent, de moins de 2 ans" },
+    { value: "Puissant et récent", hint: "type Intel Core i7 / AMD Ryzen 7, ou équivalent, de moins de 2 ans" },
+  ];
+  const cpu = cpuByBand[band];
+
+  // Écran et poids selon la mobilité
+  const mobilityMap = {
+    home:      { screen: "15 à 17 pouces", weight: "Peu importe, il ne bougera pas", battery: null },
+    sometimes: { screen: "14 à 15 pouces", weight: "Moins de 1,8 kg", battery: "Autonomie correcte (une demi-journée)" },
+    daily:     { screen: "13 à 14 pouces", weight: "Moins de 1,5 kg", battery: "Bonne autonomie" },
+  };
+  const mob = mobilityMap[s.mobility];
+  let battery = mob.battery;
+  if (s.plug === "noplug") battery = "Grande autonomie : il doit tenir une journée entière sans prise";
+  if (s.plug === "plug" && s.mobility === "sometimes") battery = null;
+
+  // Budget recommandé (nos tranches) selon la bande et la carte graphique
+  let minBudget = band === 0 ? "b1" : band === 1 ? "b2" : "b3";
+  if (needsGPU) minBudget = "b3";
+  if (s.os === "apple" && BUDGET_RANK[minBudget] < 3) minBudget = "b3";
+
+  // Arbitrages honnêtes
+  const notices = [];
+  const budgetKnown = s.budget && s.budget !== "b0";
+
+  if (budgetKnown && BUDGET_RANK[s.budget] < BUDGET_RANK[minBudget]) {
+    if (s.os === "apple" && BUDGET_RANK[s.budget] < 3) {
+      notices.push({
+        type: "warn",
+        title: "Parlons franchement du budget",
+        text: "Un Mac neuf dépasse généralement votre budget. Deux options honnêtes : un MacBook reconditionné auprès d'un vendeur sérieux avec garantie, ou un ordinateur Windows équivalent qui rentre dans votre enveloppe.",
+      });
+    } else if (needsGPU) {
+      notices.push({
+        type: "warn",
+        title: "Parlons franchement du budget",
+        text: "Pour jouer confortablement à des jeux récents, votre budget actuel sera juste. Trois options : viser " + BUDGET_LABEL[minBudget] + ", regarder le reconditionné, ou accepter de jouer avec des réglages graphiques réduits.",
+      });
+    } else {
+      notices.push({
+        type: "warn",
+        title: "Parlons franchement du budget",
+        text: "Pour vos usages, le confort se trouve plutôt dans la tranche " + BUDGET_LABEL[minBudget] + ". Avec votre budget, c'est possible, mais il faudra faire des compromis (machine plus lente ou reconditionné). On préfère vous le dire.",
+      });
+    }
+  }
+
+  if (budgetKnown && BUDGET_RANK[s.budget] >= BUDGET_RANK[minBudget] + 2) {
+    notices.push({
+      type: "good",
+      title: "Bonne nouvelle : pas besoin de dépenser autant",
+      text: "Pour vos usages, un ordinateur dans la tranche " + BUDGET_LABEL[minBudget] + " suffit largement. Dépenser plus n'apportera rien que vous remarquerez. Gardez la différence.",
+    });
+  }
+
+  if (!budgetKnown) {
+    notices.push({
+      type: "good",
+      title: "Pour vous donner un ordre de grandeur",
+      text: "Le type d'ordinateur recommandé ici se trouve généralement dans la tranche " + BUDGET_LABEL[minBudget] + ". C'est un repère, pas une obligation.",
+    });
+  }
+
+  if (s.os === "apple" && needsGPU) {
+    notices.push({
+      type: "warn",
+      title: "Apple et les jeux vidéo",
+      text: "Beaucoup de jeux récents ne sortent pas sur Mac. Si les jeux sont votre priorité, un ordinateur Windows sera un choix plus sûr. Si le Mac est votre priorité, vérifiez que vos jeux y existent avant d'acheter.",
+    });
+  }
+
+  // Système d'exploitation
+  let osValue, osWhy;
+  if (s.os === "apple") {
+    osValue = "Mac (macOS)";
+    osWhy = "Vous êtes déjà dans l'univers Apple : vous garderez vos repères et tout se synchronisera avec votre iPhone ou iPad.";
+  } else if (s.os === "windows") {
+    osValue = "Windows";
+    osWhy = "C'est ce que vous connaissez déjà : aucun réapprentissage, et le plus grand choix de machines.";
+  } else {
+    osValue = "Windows";
+    osWhy = "Sans habitude particulière, c'est le choix le plus simple : le plus répandu, le plus grand choix de machines et de prix.";
+  }
+
+  // Nom du profil
+  const profileNames = [
+    "L'essentiel du quotidien",
+    "Le polyvalent fiable",
+    needsGPU ? "Le costaud, taillé pour le jeu" : "Le costaud, taillé pour créer",
+  ];
+
+  // Raisonnement transparent : chaque réponse → conséquence
+  const usageLabels = usage.map((u) => QUESTIONS.usage.options.find((o) => o.id === u).label.toLowerCase());
+  const workLabel = QUESTIONS.work.options.find((o) => o.id === s.work);
+
+  const specs = [
+    {
+      name: "Processeur", value: cpu.value,
+      why: "Parce que vous avez répondu « " + usageLabels.join(" » et « ") + " ». " + cpu.hint + ".",
+    },
+    {
+      name: "Mémoire vive", value: ram + " Go",
+      why: s.work === "solo"
+        ? "Vous faites une chose à la fois : inutile de payer pour de la mémoire que vous n'utiliserez pas."
+        : "Parce que vous avez répondu « " + workLabel.label.toLowerCase() + " » : c'est la mémoire qui permet de tout garder ouvert sans ralentir.",
+    },
+    {
+      name: "Stockage", value: storage,
+      why: "Un SSD, jamais un disque dur classique : c'est ce qui rend un ordinateur rapide à l'allumage et au quotidien." +
+        (heavyMedia || usage.includes("gaming") ? " La grande taille, c'est pour vos photos, vidéos ou jeux, qui prennent beaucoup de place." : ""),
+    },
+    {
+      name: "Carte graphique",
+      value: needsGPU ? "Dédiée (obligatoire)" : heavyMedia ? "Dédiée recommandée" : "Celle intégrée suffit",
+      why: needsGPU
+        ? "Les jeux récents en ont besoin. Sans elle, ça ne fonctionnera tout simplement pas bien."
+        : heavyMedia
+          ? "Pour le montage vidéo, elle accélère nettement le travail. Un vrai plus, sans être bloquant pour débuter."
+          : "Pour vos usages, la puce graphique incluse dans le processeur fait très bien le travail. Économie assurée.",
+    },
+    {
+      name: "Écran", value: mob.screen,
+      why: s.mobility === "home"
+        ? "Il ne bouge pas : autant prendre grand et confortable pour les yeux."
+        : "Le bon équilibre entre confort de lecture et facilité de transport pour vos déplacements.",
+    },
+    {
+      name: "Poids", value: mob.weight,
+      why: s.mobility === "daily"
+        ? "Transporté tous les jours, chaque centaine de grammes compte dans le sac."
+        : s.mobility === "sometimes"
+          ? "Transporté de temps en temps : léger, sans que ce soit le critère numéro un."
+          : "Un ordinateur qui reste à la maison peut être plus lourd sans que ça vous gêne.",
+    },
+  ];
+
+  if (battery) {
+    specs.push({
+      name: "Batterie", value: battery,
+      why: s.plug === "noplug"
+        ? "Vous êtes souvent loin d'une prise : c'est un critère décisif, vérifiez-le en priorité."
+        : "Vous vous déplacez : une autonomie correcte évite de trimballer le chargeur partout.",
+    });
+  }
+
+  specs.push({ name: "Système", value: osValue, why: osWhy });
+
+  // Check-list avant achat
+  const checklist = [
+    "La mémoire vive fait bien " + ram + " Go (parfois cachée dans la fiche technique sous « RAM »).",
+    "Le stockage est un SSD, pas un « disque dur » — c'est écrit sur la fiche.",
+    "Le processeur date de moins de 2 ans (" + cpu.hint + ").",
+  ];
+  if (needsGPU) checklist.push("Une carte graphique dédiée est bien présente (NVIDIA ou AMD, mentionnée à part du processeur).");
+  if (s.mobility !== "home") checklist.push("Le poids réel : " + mob.weight.toLowerCase() + ", vérifiez-le sur la fiche, pas sur la photo.");
+  if (battery) checklist.push("L'autonomie annoncée par le fabricant — retirez environ un tiers pour avoir la vraie.");
+  checklist.push("Le clavier est bien AZERTY (piège classique des sites étrangers).");
+
+  // Cibles machine-lisibles : servent au vérificateur (comparaison Icecat).
+  const targets = {
+    ramGo: ram,
+    ssd: true,
+    storageGo: storageGo,
+    cpuTier: band,                                   // 0, 1 ou 2 = niveau minimum
+    gpu: needsGPU ? "required" : heavyMedia ? "recommended" : "integrated",
+    os: s.os === "apple" ? "mac" : "windows",
+  };
+
+  return { name: profileNames[band], band, ram, storage, storageGo, cpu, needsGPU, specs, notices, checklist, minBudget, targets };
+}
+
+/* ---------- Fiche mémo (texte partageable) ---------- */
+
+function memoText(p) {
+  const lines = [
+    "MA FICHE MÉMO — Quel PC",
+    "Profil : " + p.name,
+    "",
+    ...p.specs.map((s) => "• " + s.name + " : " + s.value),
+    "",
+    "À vérifier avant d'acheter :",
+    ...p.checklist.map((c) => "□ " + c),
+    "",
+    "Fiche générée le " + new Date().toLocaleDateString("fr-FR"),
+  ];
+  return lines.join("\n");
+}
+
+/* ---------- Machines du moment (éditable) ----------
+   Sélection validée à la main, par bande de profil (0, 1, 2).
+   Pour publier une machine : passer placeholder à false et remplir
+   name / price / blurb, et si possible ean (active le bouton "Vérifier").
+   Le conseil de fond reste valable même sans aucune machine ici. */
+
+const MACHINES = {
+  0: [
+    { placeholder: true, name: "Machine validée à la main nº1", price: "", blurb: "Modèle vérifié par nos soins, avec prix constaté et raison du choix.", ean: "" },
+    { placeholder: true, name: "Machine validée à la main nº2", price: "", blurb: "Sélection datée et renouvelée — jamais de classement biaisé.", ean: "" },
+  ],
+  1: [
+    { placeholder: true, name: "Machine validée à la main nº1", price: "", blurb: "Modèle vérifié par nos soins, avec prix constaté et raison du choix.", ean: "" },
+    { placeholder: true, name: "Machine validée à la main nº2", price: "", blurb: "Sélection datée et renouvelée — jamais de classement biaisé.", ean: "" },
+  ],
+  2: [
+    { placeholder: true, name: "Machine validée à la main nº1", price: "", blurb: "Modèle vérifié par nos soins, avec prix constaté et raison du choix.", ean: "" },
+    { placeholder: true, name: "Machine validée à la main nº2", price: "", blurb: "Sélection datée et renouvelée — jamais de classement biaisé.", ean: "" },
+  ],
+};
+
+/* ---------- Source de données produit (Icecat) ----------
+   Le brief : on se base sur l'identifiant (EAN/MPN), pas sur le texte
+   de la page. Un seul moteur pour l'extension, la photo et la saisie.
+
+   En production, fetchProductByEAN() appelle Icecat via un petit proxy
+   côté serveur (l'API Icecat exige une clé et n'est pas appelable
+   directement depuis le navigateur : clé exposée + CORS). Le proxy
+   masque la clé et renvoie le JSON normalisé ci-dessous.
+   Icecat = catalogue ouvert, inscription de base gratuite, requête par
+   EAN/UPC ou n° de pièce, XML/JSON, large couverture européenne.
+
+   Ici, pour rendre la V1 pleinement testable hors-ligne, on branche un
+   petit CATALOGUE DE DÉMONSTRATION (données fictives, clairement
+   étiquetées). Le jour où le proxy existe, seule cette fonction change. */
+
+const ICECAT_ENDPOINT = null; // ex. "/api/icecat?ean=" en production
+
+const DEMO_CATALOG = {
+  "3701234500018": { brand: "PortaBook (démo)", name: "Air 14", specs: { ramGo: 16, storageGo: 512, storageType: "SSD", cpuName: "Intel Core i5-1335U", cpuTier: 1, gpuDedicated: false, os: "windows", weightKg: 1.4, screenIn: 14 } },
+  "3701234500025": { brand: "BudgetMate (démo)", name: "15", specs: { ramGo: 8, storageGo: 256, storageType: "SSD", cpuName: "Intel Core i3-1215U", cpuTier: 0, gpuDedicated: false, os: "windows", weightKg: 1.8, screenIn: 15 } },
+  "3701234500032": { brand: "OldStock (démo)", name: "15 HDD", specs: { ramGo: 8, storageGo: 1000, storageType: "HDD", cpuName: "Intel Celeron N4020", cpuTier: 0, gpuDedicated: false, os: "windows", weightKg: 2.0, screenIn: 15 } },
+  "3701234500049": { brand: "FruitBook (démo)", name: "Air 13", specs: { ramGo: 16, storageGo: 512, storageType: "SSD", cpuName: "Puce Apple série M", cpuTier: 2, gpuDedicated: false, os: "mac", weightKg: 1.24, screenIn: 13 } },
+  "3701234500056": { brand: "PlayForce (démo)", name: "16 RTX", specs: { ramGo: 32, storageGo: 1000, storageType: "SSD", cpuName: "AMD Ryzen 7", cpuTier: 2, gpuDedicated: true, os: "windows", weightKg: 2.3, screenIn: 16 } },
+};
+const DEMO_EANS = Object.keys(DEMO_CATALOG);
+
+function cleanEAN(raw) {
+  return String(raw || "").replace(/\D/g, "");
+}
+
+// Renvoie une promesse { found, product?, source } — jamais un verdict inventé.
+function fetchProductByEAN(raw) {
+  const ean = cleanEAN(raw);
+  return new Promise((resolve) => {
+    if (ean.length < 8) { resolve({ found: false, reason: "format" }); return; }
+    // Point d'intégration Icecat réel (désactivé en démo) :
+    // if (ICECAT_ENDPOINT) { fetch(ICECAT_ENDPOINT + ean)... resolve(normalize(json)); return; }
+    setTimeout(() => {
+      const hit = DEMO_CATALOG[ean];
+      if (hit) resolve({ found: true, source: "démo", product: { ean, brand: hit.brand, name: hit.name, specs: hit.specs } });
+      else resolve({ found: false, reason: "unknown" });
+    }, 650);
+  });
+}
+
+/* Compare les specs réelles d'un produit aux cibles du profil.
+   Statuts : ok (correspond), low (en-dessous), unknown (info absente).
+   Formulation prudente : « d'après la référence, ce modèle a normalement… » */
+
+function compareToProfile(product, targets) {
+  const sp = product.specs || {};
+  const lines = [];
+
+  // Processeur
+  if (typeof sp.cpuTier === "number") {
+    lines.push({
+      status: sp.cpuTier >= targets.cpuTier ? "ok" : "low",
+      label: "Processeur",
+      detail: "D'après la référence, ce modèle a normalement un " + (sp.cpuName || "processeur") +
+        (sp.cpuTier >= targets.cpuTier ? " — au niveau attendu." : " — un cran en dessous de l'idéal pour vos usages."),
+    });
+  } else {
+    lines.push({ status: "unknown", label: "Processeur", detail: "Information non disponible sur cette référence." });
+  }
+
+  // Mémoire vive
+  if (typeof sp.ramGo === "number") {
+    lines.push({
+      status: sp.ramGo >= targets.ramGo ? "ok" : "low",
+      label: "Mémoire vive",
+      detail: sp.ramGo + " Go annoncés" + (sp.ramGo >= targets.ramGo
+        ? " — conforme (" + targets.ramGo + " Go visés)."
+        : " — sous les " + targets.ramGo + " Go recommandés pour vous."),
+    });
+  } else {
+    lines.push({ status: "unknown", label: "Mémoire vive", detail: "Information non disponible sur cette référence." });
+  }
+
+  // Stockage (type + capacité)
+  if (sp.storageType) {
+    const isSSD = sp.storageType.toUpperCase() === "SSD";
+    const bigEnough = typeof sp.storageGo !== "number" || sp.storageGo >= targets.storageGo;
+    lines.push({
+      status: isSSD && bigEnough ? "ok" : "low",
+      label: "Stockage",
+      detail: (sp.storageGo ? sp.storageGo + " Go " : "") + sp.storageType +
+        (isSSD ? "" : " — attention, un disque dur classique, bien plus lent qu'un SSD.") +
+        (isSSD && !bigEnough ? " — un peu juste par rapport aux " + targets.storageGo + " Go visés." : (isSSD ? " — parfait." : "")),
+    });
+  } else {
+    lines.push({ status: "unknown", label: "Stockage", detail: "Information non disponible sur cette référence." });
+  }
+
+  // Carte graphique
+  if (typeof sp.gpuDedicated === "boolean") {
+    if (targets.gpu === "required") {
+      lines.push({
+        status: sp.gpuDedicated ? "ok" : "low",
+        label: "Carte graphique",
+        detail: sp.gpuDedicated ? "Carte dédiée présente — indispensable pour vous, c'est bon." : "Pas de carte dédiée — bloquant pour les jeux récents.",
+      });
+    } else {
+      lines.push({
+        status: "ok",
+        label: "Carte graphique",
+        detail: sp.gpuDedicated ? "Carte dédiée présente — au-delà de vos besoins, mais pas un défaut." : "Graphique intégré — suffisant pour vos usages.",
+      });
+    }
+  }
+
+  // Système
+  if (sp.os) {
+    const osFr = sp.os === "mac" ? "macOS (Mac)" : "Windows";
+    lines.push({
+      status: sp.os === targets.os ? "ok" : "low",
+      label: "Système",
+      detail: sp.os === targets.os ? osFr + " — conforme à votre habitude." : osFr + " — différent de l'habitude que vous nous avez indiquée.",
+    });
+  }
+
+  const known = lines.filter((l) => l.status !== "unknown");
+  const lows = known.filter((l) => l.status === "low");
+  const score = known.length ? (known.length - lows.length) / known.length : 0;
+
+  let level, tone, mascotPose, headline;
+  if (!known.length) {
+    level = "Impossible à évaluer"; tone = "neutral"; mascotPose = "think";
+    headline = "Je n'ai pas assez d'informations sur cette référence pour trancher.";
+  } else if (lows.length === 0) {
+    level = "Correspond bien"; tone = "good"; mascotPose = "up";
+    headline = "Bonne nouvelle : d'après la référence, ce modèle colle à votre profil.";
+  } else if (score >= 0.6) {
+    level = "Correspond en partie"; tone = "warn"; mascotPose = "think";
+    headline = "Ça peut aller, mais regardez les points en orange avant de vous décider.";
+  } else {
+    level = "Ne correspond pas assez"; tone = "warn"; mascotPose = "open";
+    headline = "À votre place, je continuerais à chercher : trop d'écarts avec votre profil.";
+  }
+
+  return { level, tone, mascotPose, headline, lines };
+}
+
+/* ---------- Fiche mémo en image (canvas) ---------- */
+
+function svgToImage(svg) {
+  return new Promise((resolve, reject) => {
+    const withNs = svg.replace("<svg ", '<svg xmlns="http://www.w3.org/2000/svg" ');
+    const img = new Image();
+    img.onload = () => resolve(img);
+    img.onerror = reject;
+    img.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(withNs);
+  });
+}
+
+async function generateMemoCanvas(p) {
+  try { await document.fonts.ready; } catch (e) { /* polices système en secours */ }
+
+  const scale = 2;
+  const W = 540;
+  const pad = 28;
+  const rowH = 62;
+  const specsTop = 250;
+  const H = specsTop + p.specs.length * rowH + 118;
+
+  const cv = document.createElement("canvas");
+  cv.width = W * scale; cv.height = H * scale;
+  const ctx = cv.getContext("2d");
+  ctx.scale(scale, scale);
+
+  const rr = (x, y, w, h, r) => {
+    if (ctx.roundRect) { ctx.beginPath(); ctx.roundRect(x, y, w, h, r); }
+    else { ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r); ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath(); }
+  };
+
+  // Fond
+  ctx.fillStyle = "#FBF6EE"; ctx.fillRect(0, 0, W, H);
+
+  // Bannière profil
+  ctx.fillStyle = "#0E5E3E"; rr(pad, pad, W - pad * 2, 170, 22); ctx.fill();
+  ctx.fillStyle = "#A9DCC2";
+  ctx.font = '700 15px "Inter", sans-serif';
+  ctx.fillText("MA FICHE MÉMO — QUEL PC", pad + 26, pad + 44);
+  ctx.fillStyle = "#FFFFFF";
+  ctx.font = '800 34px "Bricolage Grotesque", sans-serif';
+  ctx.fillText(p.name, pad + 26, pad + 92);
+  ctx.fillStyle = "#CDE9DA";
+  ctx.font = '500 15px "Inter", sans-serif';
+  ctx.fillText("Le type d'ordinateur qui vous correspond.", pad + 26, pad + 124);
+
+  // Puce dans la bannière
+  try {
+    const puce = await svgToImage(mascot("up", 120));
+    ctx.drawImage(puce, W - pad - 118, pad + 74, 100, 80);
+  } catch (e) { /* mascotte optionnelle */ }
+
+  // Titre section
+  ctx.fillStyle = "#23281E";
+  ctx.font = '800 20px "Bricolage Grotesque", sans-serif';
+  ctx.fillText("À montrer en magasin", pad + 4, specsTop - 18);
+
+  // Lignes de specs
+  p.specs.forEach((s, i) => {
+    const y = specsTop + i * rowH;
+    ctx.fillStyle = "#FFFFFF"; rr(pad, y, W - pad * 2, rowH - 12, 14); ctx.fill();
+    ctx.fillStyle = "#6D7268";
+    ctx.font = '700 12px "Inter", sans-serif';
+    ctx.fillText(s.name.toUpperCase(), pad + 18, y + 22);
+    ctx.fillStyle = "#0E5E3E";
+    ctx.font = '700 18px "Inter", sans-serif';
+    ctx.fillText(s.value, pad + 18, y + 43);
+  });
+
+  // Pied de page
+  const fy = H - 74;
+  ctx.strokeStyle = "#E8E1D4"; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(pad, fy); ctx.lineTo(W - pad, fy); ctx.stroke();
+  ctx.fillStyle = "#6D7268";
+  ctx.font = '500 13px "Inter", sans-serif';
+  ctx.fillText("Généré le " + new Date().toLocaleDateString("fr-FR") + " · QuelPC — conseil neutre", pad, fy + 26);
+  ctx.fillStyle = "#0E5E3E";
+  ctx.font = '700 13px "Inter", sans-serif';
+  ctx.fillText("Vérifiez le clavier AZERTY et que le stockage est bien un SSD.", pad, fy + 48);
+
+  return cv;
+}
+
+async function saveMemoImage(p) {
+  showToast("Je prépare votre fiche…");
+  let canvas;
+  try { canvas = await generateMemoCanvas(p); } catch (e) { showToast("Souci de génération, réessayez"); return; }
+
+  const blob = await new Promise((res) => canvas.toBlob(res, "image/png"));
+  if (!blob) { showToast("Souci de génération, réessayez"); return; }
+  const file = new File([blob], "ma-fiche-quelpc.png", { type: "image/png" });
+
+  if (navigator.canShare && navigator.canShare({ files: [file] })) {
+    try { await navigator.share({ files: [file], title: "Ma fiche — Quel PC" }); return; } catch (e) { /* annulé → on télécharge */ }
+  }
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = "ma-fiche-quelpc.png";
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 4000);
+  showToast("Fiche enregistrée dans vos téléchargements");
+}
+
+async function shareProfileLink() {
+  const url = profileLink(state);
+  if (navigator.share) {
+    try { await navigator.share({ title: "Mon profil — Quel PC", text: "Voici le type d'ordinateur qu'il me faut :", url }); return; } catch (e) { /* annulé */ }
+  }
+  try { await navigator.clipboard.writeText(url); showToast("Lien copié ! Envoyez-le par SMS ou WhatsApp"); }
+  catch (e) { showToast("Copie impossible, lien : " + url); }
+}
+
+/* ---------- Rendu ---------- */
+
+const app = document.getElementById("app");
+
+function render() {
+  if (screen === "home") renderHome();
+  else if (screen === "question") renderQuestion();
+  else if (screen === "computing") renderComputing();
+  else renderResult();
+  window.scrollTo(0, 0);
+}
+
+function renderHome() {
+  const session = loadSession();
+  const hasSession = session && session.state && session.state.usage && !isComplete(session.state);
+  const last = loadLast();
+
+  const resumeBlock = hasSession ? `
+    <div class="resume">
+      <div class="resume-top">${ic("refresh")} Reprendre où vous en étiez ?</div>
+      <p>Vous aviez commencé le questionnaire. On continue ou on repart de zéro ?</p>
+      <div class="resume-actions">
+        <button class="r-go" id="resume-go">Reprendre</button>
+        <button class="r-new" id="resume-new">Recommencer</button>
+      </div>
+    </div>` : (last ? `
+    <div class="resume">
+      <div class="resume-top">${ic("compass")} Revoir votre dernier profil</div>
+      <p>On a gardé le profil de votre dernière visite.</p>
+      <div class="resume-actions">
+        <button class="r-go" id="see-last">Revoir mon profil</button>
+        <button class="r-new" id="resume-new">Nouveau test</button>
+      </div>
+    </div>` : "");
+
+  app.innerHTML = `
+    <div class="screen hero">
+      <div class="logo">
+        <span class="logo-mark">${ic("laptop")}</span>
+        <span class="logo-name">Quel<span>PC</span></span>
+      </div>
+      <div class="mascot-row">
+        <span class="mascot-wrap float mascot-pop">${mascot("wave", 108)}</span>
+        <span class="bubble">Salut, moi c'est <strong>Puce</strong> ! Dites-moi ce que vous faites, je trouve l'ordi qu'il vous faut.</span>
+      </div>
+      <h1>Quel ordinateur est fait <em>pour vous</em> ?</h1>
+      <p class="lead">Répondez à 6 questions simples — sur votre vie, pas sur la technique. On s'occupe de traduire.</p>
+      ${resumeBlock}
+      <div class="pillars">
+        <div class="pillar"><span class="pillar-icon t-green">${ic("shield")}</span><div><strong>100 % neutre</strong><span class="sub">Nous ne vendons rien. Juste un conseil honnête.</span></div></div>
+        <div class="pillar"><span class="pillar-icon t-blue">${ic("bubble")}</span><div><strong>Zéro jargon</strong><span class="sub">Aucune question technique. Promis.</span></div></div>
+        <div class="pillar"><span class="pillar-icon t-coral">${ic("clock")}</span><div><strong>Moins de 5 minutes</strong><span class="sub">Une question à la fois, et c'est réglé.</span></div></div>
+      </div>
+      <button class="btn" id="start">Trouver mon ordinateur</button>
+      <p class="hero-footnote">Gratuit, sans compte, sans email.</p>
+    </div>`;
+
+  const start = () => { state = {}; currentStep = 0; clearSession(); screen = "question"; render(); };
+  document.getElementById("start").onclick = start;
+
+  const goResume = document.getElementById("resume-go");
+  if (goResume) goResume.onclick = () => { state = session.state; currentStep = session.currentStep || 0; screen = "question"; render(); };
+  const newBtn = document.getElementById("resume-new");
+  if (newBtn) newBtn.onclick = start;
+  const seeLast = document.getElementById("see-last");
+  if (seeLast) seeLast.onclick = () => { state = last; currentStep = 0; screen = "result"; render(); };
+}
+
+function renderQuestion() {
+  const steps = activeSteps();
+  if (currentStep >= steps.length) { screen = "computing"; render(); return; }
+  const qid = steps[currentStep];
+  const q = QUESTIONS[qid];
+  const selected = q.multi ? (state[qid] || []) : state[qid];
+
+  app.innerHTML = `
+    <div class="topbar">
+      <button class="back-btn" id="back">${ic("chevronLeft")} Retour</button>
+      <div class="progress-segs">
+        ${steps.map((_, i) => `<span class="seg ${i < currentStep ? "done" : i === currentStep ? "now" : ""}"></span>`).join("")}
+      </div>
+      <span class="step-count">${currentStep + 1}/${steps.length}</span>
+    </div>
+    <div class="mascot-row" id="mascot-row">
+      <span class="mascot-wrap mascot-pop">${mascot(MASCOT_BY_QUESTION[qid].pose, 76)}</span>
+      <span class="bubble">${MASCOT_BY_QUESTION[qid].quip}</span>
+    </div>
+    <div class="screen">
+      <h2 class="q-title">${q.title}</h2>
+      <p class="q-help">${q.help}</p>
+      <div class="options">
+        ${q.options.map((o) => `
+          <button class="option ${q.multi ? (selected.includes(o.id) ? "selected" : "") : (selected === o.id ? "selected" : "")}" data-id="${o.id}">
+            <span class="opt-icon ${o.tint}">${ic(o.icon)}</span>
+            <span class="opt-text"><span class="opt-label">${o.label}</span>${o.sub ? `<span class="opt-sub">${o.sub}</span>` : ""}</span>
+            <span class="opt-check">${ic("check")}</span>
+          </button>`).join("")}
+      </div>
+      ${q.multi ? `<button class="btn" id="next" ${selected.length ? "" : "disabled"}>Continuer</button>` : ""}
+    </div>`;
+
+  // Puce réagit : remplace pose + bulle dans la rangée mascotte.
+  const react = (pose, quip, size) => {
+    const row = document.getElementById("mascot-row");
+    if (!row) return;
+    row.innerHTML = `<span class="mascot-wrap mascot-pop">${mascot(pose, size || 76)}</span><span class="bubble">${quip}</span>`;
+  };
+
+  document.getElementById("back").onclick = () => {
+    if (currentStep === 0) { screen = "home"; } else { currentStep--; }
+    render();
+  };
+
+  app.querySelectorAll(".option").forEach((btn) => {
+    btn.onclick = () => {
+      const id = btn.dataset.id;
+      if (q.multi) {
+        let sel = state[qid] || [];
+        if (sel.includes(id)) sel = sel.filter((x) => x !== id);
+        else if (sel.length < q.max) sel = [...sel, id];
+        else sel = [sel[1], id]; // remplace le plus ancien
+        state[qid] = sel;
+        saveSession();
+        render();
+        // Bulle dynamique selon le nombre de choix
+        const n = (state[qid] || []).length;
+        if (n === 1) react("up", "Super. Un autre usage, ou on continue ?");
+        else if (n >= 2) react("up", "Parfait, j'ai ce qu'il me faut !");
+      } else {
+        state[qid] = id;
+        // Nettoie les réponses des questions devenues non pertinentes
+        if (qid === "mobility" && id === "home") delete state.plug;
+        btn.classList.add("selected");
+        saveSession();
+        const r = (MASCOT_REACTIONS[qid] && MASCOT_REACTIONS[qid][id]) || MASCOT_DEFAULT_REACTION;
+        react(r.pose, r.quip);
+        setTimeout(() => { currentStep++; render(); }, 620);
+      }
+    };
+  });
+
+  const next = document.getElementById("next");
+  if (next) next.onclick = () => { currentStep++; render(); };
+}
+
+/* Écran de préparation : les étapes se cochent l'une après l'autre,
+   puis le résultat s'affiche. Donne un moment de révélation au profil. */
+function renderComputing() {
+  const steps = [
+    "Analyse de vos usages",
+    "Calibrage de la mémoire",
+    "Vérification du budget",
+    "Rédaction de votre profil",
+  ];
+  app.innerHTML = `
+    <div class="screen computing">
+      <div class="mascot-stage"><span class="float">${mascot("think", 110)}</span></div>
+      <h2>Je croise vos réponses…</h2>
+      <div class="compute-steps">
+        ${steps.map((s) => `
+          <div class="compute-step">
+            <span class="compute-bullet">${ic("check")}</span>
+            <span>${s}</span>
+          </div>`).join("")}
+      </div>
+    </div>`;
+
+  const els = [...app.querySelectorAll(".compute-step")];
+  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const stepDelay = reduced ? 0 : 420;
+
+  els.forEach((el, i) => {
+    setTimeout(() => el.classList.add("active"), i * stepDelay);
+    setTimeout(() => el.classList.add("done"), i * stepDelay + stepDelay * 0.8);
+  });
+  setTimeout(() => { screen = "result"; render(); }, steps.length * stepDelay + 300);
+}
+
+function renderResult() {
+  const p = computeProfile(state);
+  const today = new Date().toLocaleDateString("fr-FR", { month: "long", year: "numeric" });
+  let riseIdx = 0;
+  const rise = () => `class="rise" style="animation-delay:${(riseIdx++) * 90}ms"`;
+
+  // Persistance : garder le profil, nettoyer la session, refléter l'URL partageable.
+  saveLast(state);
+  clearSession();
+  try { history.replaceState(null, "", "#r=" + encodeURIComponent(encodeState(state))); } catch (e) { /* file:// */ }
+
+  const scanSupported = ("BarcodeDetector" in window) && !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
+  const picks = MACHINES[p.band] || [];
+  const picksHTML = picks.map((m) => m.placeholder ? `
+        <div class="pick">
+          <span class="pick-tag">Emplacement à compléter</span>
+          <div class="pick-name">${m.name}</div>
+          <div class="pick-meta">${m.blurb}</div>
+        </div>` : `
+        <div class="pick">
+          <div class="pick-name">${m.name}${m.price ? ` — ${m.price}` : ""}</div>
+          <div class="pick-meta">${m.blurb}</div>
+          ${m.ean ? `<a class="pick-link" href="#" data-ean="${m.ean}">${ic("target")} Vérifier ce modèle ↓</a>` : ""}
+        </div>`).join("");
+
+  app.innerHTML = `
+    <div class="screen" style="padding-top:16px">
+      <div class="profile-banner rise" style="animation-delay:0ms">
+        <span class="pb-label">${ic("spark")} Votre profil</span>
+        <h2>${p.name}</h2>
+        <p>Le type d'ordinateur qui correspond à ce que vous nous avez dit — et pourquoi, point par point.</p>
+        <span class="pb-mascot mascot-pop">${mascot("up", 104)}</span>
+      </div>
+
+      ${p.notices.map((n) => `
+        <div class="notice ${n.type} rise" style="animation-delay:${(++riseIdx) * 90}ms"><strong>${n.title}</strong>${n.text}</div>`).join("")}
+
+      <div ${rise()}>
+      <div class="card">
+        <div class="card-title"><span class="ct-icon t-green">${ic("compass")}</span><h3>Votre profil, point par point</h3></div>
+        ${p.specs.map((s) => `
+          <div class="spec">
+            <div class="spec-head"><span class="spec-name">${s.name}</span><span class="spec-value">${s.value}</span></div>
+            <p class="spec-why">${s.why}</p>
+          </div>`).join("")}
+      </div>
+      </div>
+
+      <div ${rise()}>
+      <div class="card">
+        <div class="card-title"><span class="ct-icon t-blue">${ic("circleCheck")}</span><h3>À vérifier avant d'acheter</h3></div>
+        <ul class="checklist">${p.checklist.map((c) => `<li><span class="cl-check">${ic("check")}</span><span>${c}</span></li>`).join("")}</ul>
+      </div>
+      </div>
+
+      <div ${rise()}>
+      <div class="card">
+        <div class="card-title"><span class="ct-icon t-violet">${ic("target")}</span><h3>Un modèle en tête ? Je le vérifie</h3></div>
+        <p class="verify-intro">Vu un ordinateur en magasin ou en ligne ? Saisissez le code-barres (EAN) de la boîte : je compare ses caractéristiques réelles à votre profil.</p>
+        <div class="verify-form">
+          <input id="ean-input" inputmode="numeric" autocomplete="off" placeholder="Code-barres, ex. 3701234500018">
+          <div class="verify-btns">
+            ${scanSupported ? `<button class="btn secondary" id="scan-btn">${ic("camera")} Scanner</button>` : ""}
+            <button class="btn" id="verify-btn">Vérifier</button>
+          </div>
+        </div>
+        <p class="verify-hint">Essai (données de démonstration) : ${DEMO_EANS.slice(0, 3).map((e) => `<code data-demo="${e}">${e}</code>`).join(" · ")}</p>
+        <div id="verify-out"></div>
+      </div>
+      </div>
+
+      <div ${rise()}>
+      <div class="card">
+        <div class="picks-header">
+          <div class="card-title"><span class="ct-icon t-coral">${ic("bag")}</span><h3>Nos machines du moment</h3></div>
+          <span class="picks-date">Sélection de ${today}</span>
+        </div>
+        ${picksHTML}
+      </div>
+      </div>
+
+      <div class="result-actions rise" style="animation-delay:${(++riseIdx) * 90}ms">
+        <button class="btn" id="share-link">${ic("share")} Partager mon profil</button>
+        <button class="btn secondary" id="save-memo">${ic("bag")} Enregistrer ma fiche pour le magasin</button>
+        <button class="btn secondary" id="restart">${ic("refresh")} Refaire le questionnaire</button>
+      </div>
+      <footer>QuelPC — conseil indépendant, nous ne vendons pas d'ordinateurs.<br>V1 · MVP rentrée 2026</footer>
+    </div>`;
+
+  document.getElementById("restart").onclick = () => {
+    state = {}; currentStep = 0;
+    try { history.replaceState(null, "", location.pathname); } catch (e) { /* file:// */ }
+    screen = "home"; render();
+  };
+  document.getElementById("share-link").onclick = () => shareProfileLink();
+  document.getElementById("save-memo").onclick = () => saveMemoImage(p);
+
+  // ----- Vérificateur -----
+  const input = document.getElementById("ean-input");
+  const out = document.getElementById("verify-out");
+  const runVerify = () => verifyEAN(input.value, p.targets, out);
+  document.getElementById("verify-btn").onclick = runVerify;
+  input.addEventListener("keydown", (e) => { if (e.key === "Enter") runVerify(); });
+
+  app.querySelectorAll("code[data-demo]").forEach((c) => {
+    c.onclick = () => { input.value = c.dataset.demo; runVerify(); };
+  });
+  app.querySelectorAll(".pick-link[data-ean]").forEach((a) => {
+    a.onclick = (e) => { e.preventDefault(); input.value = a.dataset.ean; input.scrollIntoView({ behavior: "smooth", block: "center" }); runVerify(); };
+  });
+
+  const scanBtn = document.getElementById("scan-btn");
+  if (scanBtn) scanBtn.onclick = () => startScan((code) => { input.value = code; runVerify(); });
+}
+
+/* Lance la vérification d'un EAN et affiche le verdict. */
+async function verifyEAN(rawEAN, targets, out) {
+  const ean = cleanEAN(rawEAN);
+  if (ean.length < 8) {
+    out.innerHTML = `<div class="notice neutral"><strong>Code un peu court</strong>Le code-barres (EAN) fait en général 13 chiffres. Vérifiez la saisie.</div>`;
+    return;
+  }
+  out.innerHTML = `<div class="mascot-row"><span class="mascot-wrap float">${mascot("think", 64)}</span><span class="bubble">Je regarde la référence…</span></div>`;
+
+  const res = await fetchProductByEAN(ean);
+
+  if (!res.found) {
+    out.innerHTML = `
+      <div class="mascot-row"><span class="mascot-wrap">${mascot("think", 64)}</span>
+        <span class="bubble">Je n'ai pas réussi à identifier ce modèle. Plutôt que de deviner, je préfère vous le dire franchement.</span></div>
+      <div class="notice neutral" style="margin-top:12px"><strong>Modèle non trouvé</strong>Revérifiez le code sur la boîte, ou essayez le numéro de pièce fabricant. En rayon, scannez plutôt le code-barres que de recopier le nom.</div>`;
+    return;
+  }
+
+  const v = compareToProfile(res.product, targets);
+  const dotIcon = (st) => st === "ok" ? ic("check") : st === "low" ? ic("bolt") : ic("help");
+  const cls = (st) => st === "ok" ? "v-ok" : st === "low" ? "v-low" : "v-unk";
+
+  out.innerHTML = `
+    <div class="mascot-row"><span class="mascot-wrap mascot-pop">${mascot(v.mascotPose, 64)}</span>
+      <span class="bubble">${v.headline}</span></div>
+    <div class="notice ${v.tone}" style="margin-top:12px">
+      <strong>${v.level}</strong>
+      <div class="verify-product">${res.product.brand} ${res.product.name}</div>
+      <ul class="v-list">
+        ${v.lines.map((l) => `
+          <li class="${cls(l.status)}">
+            <span class="v-dot">${dotIcon(l.status)}</span>
+            <span><strong>${l.label}</strong><span class="v-txt">${l.detail}</span></span>
+          </li>`).join("")}
+      </ul>
+      <p class="verify-caution">D'après la référence saisie (source : ${res.source}). Une même référence peut avoir des variantes régionales : vérifiez sur la boîte avant d'acheter.</p>
+    </div>`;
+  out.scrollIntoView({ behavior: "smooth", block: "nearest" });
+}
+
+/* Scanner de code-barres (progressif : uniquement si BarcodeDetector existe). */
+async function startScan(onFound) {
+  let stream, raf, detector;
+  const overlay = document.createElement("div");
+  overlay.className = "scan-overlay";
+  overlay.innerHTML = `
+    <div class="scan-frame"><video playsinline muted></video><div class="scan-line"></div></div>
+    <p class="scan-hint">Visez le code-barres de la boîte. La détection est automatique.</p>
+    <button class="scan-close">Annuler</button>`;
+  document.body.appendChild(overlay);
+  const video = overlay.querySelector("video");
+
+  const stop = () => {
+    if (raf) cancelAnimationFrame(raf);
+    if (stream) stream.getTracks().forEach((t) => t.stop());
+    overlay.remove();
+  };
+  overlay.querySelector(".scan-close").onclick = stop;
+
+  try {
+    detector = new BarcodeDetector({ formats: ["ean_13", "ean_8", "upc_a", "upc_e"] });
+    stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
+    video.srcObject = stream;
+    await video.play();
+  } catch (e) {
+    stop();
+    showToast("Caméra indisponible — saisissez le code à la main");
+    return;
+  }
+
+  const tick = async () => {
+    try {
+      const codes = await detector.detect(video);
+      if (codes && codes.length) {
+        const code = cleanEAN(codes[0].rawValue);
+        if (code.length >= 8) { stop(); onFound(code); return; }
+      }
+    } catch (e) { /* image pas prête, on réessaie */ }
+    raf = requestAnimationFrame(tick);
+  };
+  raf = requestAnimationFrame(tick);
+}
+
+function showToast(msg) {
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  setTimeout(() => t.classList.remove("show"), 2600);
+}
+
+/* ---------- Démarrage ----------
+   Si l'URL porte un profil partagé (#r=…), on l'ouvre directement. */
+function init() {
+  const hash = location.hash || "";
+  if (hash.indexOf("#r=") === 0) {
+    const shared = decodeState(decodeURIComponent(hash.slice(3)));
+    if (shared && isComplete(shared)) {
+      state = shared;
+      screen = "result";
+      render();
+      return;
+    }
+  }
+  render();
+}
+
+init();
+</script>
+</body>
+</html>
