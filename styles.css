@@ -94,9 +94,9 @@ svg.ic .f { fill: currentColor; fill-opacity: 1; stroke: none; }
   padding: 8px 12px; font-size: 12.5px; box-shadow: 0 2px 0 var(--green-border);
 }
 .question-page .bubble::before { background: var(--green-soft); border-color: var(--green-border); }
-.q-title { font-size: 23px; font-weight: 800; margin-bottom: 8px; flex-shrink: 0; }
-.q-title::after { content: ""; display: block; width: 28px; height: 5px; border-radius: 9px; background: var(--green); margin-top: 7px; }
-.q-help { font-size: 13px; line-height: 1.35; color: var(--ink-soft); margin-bottom: clamp(10px, 2vh, 18px); flex-shrink: 0; }
+.q-title { min-height: 64px; display: flex; flex-direction: column; font-size: 23px; font-weight: 800; margin-bottom: 8px; flex-shrink: 0; }
+.q-title::after { content: ""; display: block; width: 28px; height: 5px; border-radius: 9px; background: var(--green); margin-top: auto; }
+.q-help { min-height: 36px; font-size: 13px; line-height: 1.35; color: var(--ink-soft); margin-bottom: clamp(10px, 2vh, 18px); flex-shrink: 0; }
 
 .options { flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; justify-content: safe center; gap: 18px; padding: 1px 1px 4px; scrollbar-width: thin; }
 .option {

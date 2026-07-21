@@ -908,7 +908,7 @@ function renderQuestion() {
           <span class="mascot-wrap mascot-pop">${mascot(MASCOT_BY_QUESTION[qid].pose, 72)}</span>
           <span class="bubble">${MASCOT_BY_QUESTION[qid].quip}</span>
         </div>
-        <h2 class="q-title">${q.title}</h2>
+        <h2 class="q-title"><span>${q.title}</span></h2>
         <p class="q-help">${q.help}</p>
         <div class="options">
           ${q.options.map((o) => `
