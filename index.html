@@ -71,7 +71,7 @@
   .t-amber  { background: var(--amber-soft);  color: var(--amber); }
 
   /* ---------- Barre de progression ---------- */
-  .topbar { display: flex; align-items: center; gap: 10px; min-height: 30px; margin-bottom: 6px; }
+  .topbar { display: flex; align-items: center; gap: 10px; min-height: 30px; margin-bottom: 6px; flex-shrink: 0; }
   .back-btn {
     background: none; border: none; cursor: pointer;
     font-family: var(--font-body); font-size: 14px; font-weight: 600;
@@ -98,16 +98,17 @@
     display: flex; flex-direction: column; overflow: hidden;
     background: radial-gradient(circle at 100% 0, var(--green-soft) 0 88px, transparent 89px), var(--bg);
   }
-  .question-guide { display: flex; align-items: center; gap: 9px; margin: 4px 0 10px; flex-shrink: 0; }
-  .question-guide .mascot { flex-shrink: 0; }
-  .question-guide p {
-    background: var(--green-soft); color: var(--green-dark); border-radius: 12px;
-    padding: 7px 10px; font-size: 12px; line-height: 1.3; font-weight: 600;
+  .question-page .mascot-row { margin: clamp(7px, 1.6vh, 14px) 0 clamp(10px, 2vh, 18px); flex-shrink: 0; }
+  .question-page .bubble {
+    border-color: var(--green-border); background: var(--green-soft); color: var(--green-dark);
+    padding: 8px 12px; font-size: 12.5px; box-shadow: 0 2px 0 var(--green-border);
   }
-  .q-title { font-size: 23px; font-weight: 800; margin-bottom: 12px; }
+  .question-page .bubble::before { background: var(--green-soft); border-color: var(--green-border); }
+  .q-title { font-size: 23px; font-weight: 800; margin-bottom: 8px; flex-shrink: 0; }
   .q-title::after { content: ""; display: block; width: 28px; height: 5px; border-radius: 9px; background: var(--green); margin-top: 7px; }
+  .q-help { font-size: 13px; line-height: 1.35; color: var(--ink-soft); margin-bottom: clamp(10px, 2vh, 18px); flex-shrink: 0; }
 
-  .options { flex: 0 1 auto; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 9px; padding: 1px 1px 4px; scrollbar-width: thin; }
+  .options { flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; justify-content: space-evenly; gap: 9px; padding: 1px 1px 4px; scrollbar-width: thin; }
   .option {
     display: flex; align-items: center; gap: 10px; text-align: left; flex-shrink: 0;
     background: var(--card); border: 2px solid var(--green-border); border-radius: 13px;
@@ -451,18 +452,23 @@ const MASCOT_ARM = "#0E5E3E";
 
 const MASCOT_POSES = {
   wave:  { armL: "M28 52 Q17 58 15 67", handL: [15, 69], armR: "M92 48 Q105 39 107 25", handR: [107, 23], eyes: "normal", mouth: "smile" },
+  open:  { armL: "M28 50 Q15 55 11 63", handL: [11, 65], armR: "M92 50 Q105 55 109 63", handR: [109, 65], eyes: "wide",   mouth: "oh" },
   up:    { armL: "M28 48 Q15 38 13 24", handL: [13, 22], armR: "M92 48 Q105 38 107 24", handR: [107, 22], eyes: "joy",    mouth: "grin", sparks: true },
   think: { armL: "M28 52 Q17 58 15 67", handL: [15, 69], armR: "M92 54 Q103 66 88 67",  handR: [86, 65],  eyes: "updots", mouth: "hmm" },
+  coin:  { armL: "M28 52 Q17 58 15 67", handL: [15, 69], armR: "M92 50 Q104 48 107 42", handR: [107, 40], eyes: "normal", mouth: "smile", coin: true },
+  point: { armL: "M28 52 Q17 58 15 67", handL: [15, 69], armR: "M92 48 Q104 44 112 42", handR: [112, 42], eyes: "normal", mouth: "smile" },
 };
 
 const MASCOT_EYES = {
   normal: '<circle cx="48" cy="40" r="3.6" fill="' + MASCOT_INK + '"/><circle cx="72" cy="40" r="3.6" fill="' + MASCOT_INK + '"/><circle cx="49.2" cy="38.8" r="1.1" fill="#fff"/><circle cx="73.2" cy="38.8" r="1.1" fill="#fff"/>',
+  wide:   '<circle cx="48" cy="40" r="4.4" fill="' + MASCOT_INK + '"/><circle cx="72" cy="40" r="4.4" fill="' + MASCOT_INK + '"/><circle cx="49.4" cy="38.4" r="1.3" fill="#fff"/><circle cx="73.4" cy="38.4" r="1.3" fill="#fff"/>',
   joy:    '<path d="M44 41 Q48 36 52 41 M68 41 Q72 36 76 41" stroke="' + MASCOT_INK + '" stroke-width="2.6" fill="none" stroke-linecap="round"/>',
   updots: '<circle cx="48" cy="37" r="3.2" fill="' + MASCOT_INK + '"/><circle cx="72" cy="37" r="3.2" fill="' + MASCOT_INK + '"/><circle cx="49" cy="35.8" r="1" fill="#fff"/><circle cx="73" cy="35.8" r="1" fill="#fff"/>',
 };
 
 const MASCOT_MOUTHS = {
   smile: '<path d="M52 49 Q60 56 68 49" stroke="' + MASCOT_INK + '" stroke-width="2.5" fill="none" stroke-linecap="round"/>',
+  oh:    '<ellipse cx="60" cy="51" rx="3.8" ry="4.6" fill="' + MASCOT_INK + '"/>',
   grin:  '<path d="M50 47 Q60 59 70 47Z" fill="' + MASCOT_INK + '"/>',
   hmm:   '<path d="M53 50 L67 48" stroke="' + MASCOT_INK + '" stroke-width="2.5" fill="none" stroke-linecap="round"/>',
 };
@@ -482,6 +488,7 @@ function mascot(pose, size, cls) {
       : "")
     + arm(p.armL) + hand(p.handL)
     + arm(p.armR) + hand(p.handR)
+    + (p.coin ? '<circle cx="107" cy="30" r="8" fill="#D98A1F"/><circle cx="107" cy="30" r="4.8" fill="none" stroke="#FFF9EF" stroke-width="1.6"/>' : "")
     + '<path d="M60 16 V7" stroke="' + MASCOT_ARM + '" stroke-width="3" stroke-linecap="round"/>'
     + '<circle cx="60" cy="5.5" r="3.6" fill="#E45C35"/>'
     + '<rect x="26" y="16" width="68" height="54" rx="12" fill="#1B8A5A"/>'
@@ -494,6 +501,45 @@ function mascot(pose, size, cls) {
     + '<rect x="71" y="85" width="13" height="7" rx="3.5" fill="' + MASCOT_ARM + '"/>'
     + "</svg>";
 }
+
+const MASCOT_BY_QUESTION = {
+  usage:    { pose: "open",  quip: "On commence par la plus importante !" },
+  work:     { pose: "up",    quip: "Là, soyez honnête avec moi…" },
+  mobility: { pose: "wave",  quip: "On avance bien !" },
+  plug:     { pose: "point", quip: "Question bonus, promis c'est la seule." },
+  os:       { pose: "think", quip: "Presque fini, plus que deux." },
+  budget:   { pose: "coin",  quip: "Dernière question !" },
+};
+
+const MASCOT_DEFAULT_REACTION = { pose: "up", quip: "Bien reçu, à vous de continuer !" };
+const MASCOT_REACTIONS = {
+  work: {
+    solo:  { pose: "wave", quip: "Simple et efficace, j'aime." },
+    multi: { pose: "up", quip: "Une équipe de choc à onglets ! Je note plus de mémoire." },
+    heavy: { pose: "up", quip: "Du lourd ! On vise costaud alors." },
+  },
+  mobility: {
+    home: { pose: "wave", quip: "Tranquille à la maison, parfait." },
+    sometimes: { pose: "wave", quip: "Un peu nomade, ça marche." },
+    daily: { pose: "up", quip: "Toujours dans le sac : léger, ce sera." },
+  },
+  plug: {
+    plug: { pose: "wave", quip: "Une prise pas loin, pas de souci." },
+    noplug: { pose: "up", quip: "Loin des prises : je muscle la batterie." },
+  },
+  os: {
+    windows: { pose: "wave", quip: "Windows, terrain connu." },
+    apple: { pose: "up", quip: "L'univers Apple, joli choix." },
+    any: { pose: "think", quip: "Pas d'avis ? Je vous prends par la main." },
+  },
+  budget: {
+    b1: { pose: "coin", quip: "Compris, on joue serré et malin." },
+    b2: { pose: "coin", quip: "Bon budget pour du solide." },
+    b3: { pose: "coin", quip: "De la marge, on va bien vous servir." },
+    b4: { pose: "up", quip: "Large ! On vise le confort." },
+    b0: { pose: "think", quip: "Pas de souci, je vous donne un ordre d'idée." },
+  },
+};
 
 /* ---------- Définition des questions ---------- */
 
@@ -1311,11 +1357,12 @@ function renderQuestion() {
         </div>
         <span class="step-count">${currentStep + 1}/${steps.length}</span>
       </div>
-      <div class="question-guide">
-        ${mascot(["wave", "up", "think"][currentStep % 3], 56, "mascot-pop")}
-        <p>${q.help}</p>
+      <div class="mascot-row" id="mascot-row">
+        <span class="mascot-wrap mascot-pop">${mascot(MASCOT_BY_QUESTION[qid].pose, 72)}</span>
+        <span class="bubble">${MASCOT_BY_QUESTION[qid].quip}</span>
       </div>
       <h2 class="q-title">${q.title}</h2>
+      <p class="q-help">${q.help}</p>
       <div class="options">
         ${q.options.map((o) => `
           <button class="option ${isSelected(o.id) ? "selected" : ""}" data-id="${o.id}" aria-pressed="${isSelected(o.id)}">
@@ -1329,6 +1376,10 @@ function renderQuestion() {
         <button class="btn" id="next" ${hasSelection ? "" : "disabled"}>Continuer</button>
       </div>
     </div>`;
+
+  const react = (pose, quip) => {
+    document.getElementById("mascot-row").innerHTML = `<span class="mascot-wrap mascot-pop">${mascot(pose, 72)}</span><span class="bubble">${quip}</span>`;
+  };
 
   document.getElementById("back").onclick = () => {
     if (currentStep === 0) { screen = "home"; } else { currentStep--; }
@@ -1357,6 +1408,14 @@ function renderQuestion() {
         option.setAttribute("aria-pressed", active);
       });
       document.getElementById("next").disabled = !values.length;
+      if (q.multi) {
+        const initial = MASCOT_BY_QUESTION[qid];
+        if (!values.length) react(initial.pose, initial.quip);
+        else react("up", values.length === 1 ? "Super. Un autre usage, ou on continue ?" : "Parfait, j'ai ce qu'il me faut !");
+      } else {
+        const reaction = (MASCOT_REACTIONS[qid] && MASCOT_REACTIONS[qid][id]) || MASCOT_DEFAULT_REACTION;
+        react(reaction.pose, reaction.quip);
+      }
     };
   });
 
