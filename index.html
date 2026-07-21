@@ -94,7 +94,7 @@
 
   .question-page {
     position: fixed; inset: 0; max-width: 480px; margin: 0 auto;
-    padding: calc(12px + env(safe-area-inset-top)) 16px calc(10px + env(safe-area-inset-bottom));
+    padding: calc(12px + env(safe-area-inset-top)) 16px calc(24px + env(safe-area-inset-bottom));
     display: flex; flex-direction: column; overflow: hidden;
     background: radial-gradient(circle at 100% 0, var(--green-soft) 0 88px, transparent 89px), var(--bg);
   }
@@ -141,13 +141,15 @@
   @keyframes checkPop { from { transform: scale(.4); } to { transform: scale(1); } }
 
   .question-actions {
-    flex-shrink: 0; display: grid; grid-template-columns: auto 1fr; gap: 9px;
+    flex-shrink: 0; display: grid; grid-template-columns: 44px 1fr; align-items: center; gap: 9px;
     padding-top: 12px; background: var(--bg);
   }
   .question-actions .back-btn {
-    border: 2px solid var(--line); border-radius: 13px; padding: 10px 12px; background: var(--card); color: var(--ink);
+    width: 44px; height: 48px; padding: 0; justify-content: center;
+    border: 0; background: transparent; color: var(--green-dark);
   }
-  .question-actions .btn { margin: 0; padding: 11px 16px; border-radius: 13px; font-size: 16px; }
+  .question-actions .back-btn svg.ic { width: 22px; height: 22px; }
+  .question-actions .btn { min-height: 48px; margin: 0; padding: 11px 16px; border-radius: 13px; font-size: 16px; }
 
   .btn {
     display: flex; align-items: center; justify-content: center; gap: 9px; width: 100%;
@@ -219,6 +221,12 @@
   /* ---------- Résultat ---------- */
   .rise { animation: rise .45s ease backwards; }
   @keyframes rise { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+  .result-screen { padding-top: 16px; gap: 16px; }
+  .result-screen .quick-list, .result-screen .result-actions { margin: 0; }
+  .result-screen .result-actions .btn { margin-top: 0; }
+  .result-screen .quick-row { padding: 12px 14px; }
+  .result-screen .drawer { background: var(--card); border: 2px solid var(--line); border-radius: 16px; padding: 0 14px; }
+  .result-screen .drawer summary { padding: 15px 0; }
 
   .profile-banner {
     position: relative; overflow: hidden;
@@ -1375,7 +1383,7 @@ function renderQuestion() {
         </div>
       </div>
       <div class="question-actions">
-        <button class="back-btn" id="back">${ic("chevronLeft")} Retour</button>
+        <button class="back-btn" id="back" aria-label="Retour">${ic("chevronLeft")}</button>
         <button class="btn" id="next" ${hasSelection ? "" : "disabled"}>Continuer</button>
       </div>
     </div>`;
@@ -1448,7 +1456,7 @@ function renderResult() {
   const scanSupported = ("BarcodeDetector" in window) && !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
 
   app.innerHTML = `
-    <div class="screen" style="padding-top:12px">
+    <div class="screen result-screen">
       <div class="profile-banner rise" style="animation-delay:0ms">
         <span class="pb-label">${ic("spark")} Votre résultat</span>
         <h2>${p.name}</h2>
