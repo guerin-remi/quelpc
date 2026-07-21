@@ -221,8 +221,7 @@
   .profile-banner {
     position: relative; overflow: hidden;
     background: linear-gradient(135deg, var(--green-dark), var(--green)); color: #fff;
-    border-radius: 24px; padding: 24px 116px 24px 20px; margin-bottom: 14px;
-    box-shadow: 0 7px 0 #0A4B32;
+    border-radius: 20px; padding: 18px 94px 18px 18px; min-height: 126px;
   }
   .profile-banner::before {
     content: ""; position: absolute; width: 120px; height: 120px; border-radius: 50%;
@@ -232,27 +231,28 @@
     content: ""; position: absolute; width: 24px; height: 24px; border-radius: 8px;
     left: 18px; bottom: -14px; background: var(--amber); transform: rotate(18deg);
   }
-  .pb-mascot { position: absolute; right: 5px; bottom: -4px; z-index: 1; }
+  .pb-mascot { position: absolute; right: 2px; bottom: -2px; z-index: 1; }
   .profile-banner .pb-label {
     display: inline-flex; align-items: center; gap: 7px;
     font-size: 12.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em;
-    color: #A9DCC2; margin-bottom: 8px;
+    color: #CDE9DA; margin-bottom: 5px;
   }
   .profile-banner .pb-label svg.ic { width: 15px; height: 15px; }
-  .profile-banner h2 { font-size: 29px; font-weight: 800; margin-bottom: 7px; }
-  .profile-banner p { font-size: 14px; color: #E1F3E9; max-width: 95%; }
+  .profile-banner h2 { font-size: 25px; font-weight: 800; margin-bottom: 5px; }
+  .profile-banner p { font-size: 13px; line-height: 1.35; color: #E1F3E9; }
 
-  .quick-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 18px 0 14px; }
-  .quick-card {
-    min-height: 112px; padding: 14px; border: 2px solid transparent; border-radius: 18px;
-    display: flex; flex-direction: column; justify-content: space-between;
+  .quick-list {
+    background: var(--card); border: 2px solid var(--line); border-radius: 16px;
+    margin: 12px 0 8px; overflow: hidden;
   }
-  .quick-card:nth-child(4n+1) { background: var(--blue-soft); color: #24569F; transform: rotate(-1deg); }
-  .quick-card:nth-child(4n+2) { background: var(--coral-soft); color: #A53D20; transform: rotate(1deg); }
-  .quick-card:nth-child(4n+3) { background: var(--violet-soft); color: #5639A7; transform: rotate(.5deg); }
-  .quick-card:nth-child(4n+4) { background: var(--amber-soft); color: var(--amber-ink); transform: rotate(-.5deg); }
-  .quick-label { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .07em; opacity: .75; }
-  .quick-value { font-family: var(--font-title); font-size: 17px; font-weight: 800; line-height: 1.15; }
+  .quick-row { display: grid; grid-template-columns: 92px 1fr; gap: 10px; align-items: center; padding: 10px 13px; border-bottom: 1px solid var(--line); }
+  .quick-row:last-child { border-bottom: none; }
+  .quick-label { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .04em; color: var(--ink-soft); }
+  .quick-label::before { content: ""; display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 6px; background: var(--blue); }
+  .quick-row:nth-child(2) .quick-label::before { background: var(--coral); }
+  .quick-row:nth-child(3) .quick-label::before { background: var(--violet); }
+  .quick-row:nth-child(4) .quick-label::before { background: var(--amber); }
+  .quick-value { font-family: var(--font-title); font-size: 15px; font-weight: 800; line-height: 1.2; text-align: right; }
 
   .card {
     background: var(--card); border: 2px solid var(--line); border-radius: var(--radius);
@@ -280,19 +280,21 @@
   .notice strong { display: block; margin-bottom: 4px; font-size: 14.5px; font-family: var(--font-title); }
 
   .drawer {
-    background: var(--card); border: 2px solid var(--line); border-radius: var(--radius);
-    margin-bottom: 12px; box-shadow: 0 3px 0 var(--line); overflow: hidden;
+    border-top: 1px solid var(--line);
   }
   .drawer summary {
-    list-style: none; cursor: pointer; padding: 16px; display: flex; align-items: center; gap: 10px;
-    font-family: var(--font-title); font-size: 16px; font-weight: 800;
+    list-style: none; cursor: pointer; padding: 13px 2px; display: flex; align-items: center;
+    font-family: var(--font-title); font-size: 14px; font-weight: 800;
   }
   .drawer summary::-webkit-details-marker { display: none; }
-  .drawer summary svg.ic { color: var(--green); }
-  .drawer-toggle { margin-left: auto; color: var(--green); font-size: 24px; line-height: 1; transition: transform .2s; }
+  .drawer-toggle { margin-left: auto; color: var(--green); font-size: 20px; line-height: 1; transition: transform .2s; }
   .drawer[open] .drawer-toggle { transform: rotate(45deg); }
-  .drawer-body { border-top: 2px solid var(--line); padding: 16px; }
+  .drawer-body { padding: 2px 2px 14px; }
   .drawer-subtitle { font-size: 13px; color: var(--ink-soft); margin: 16px 0 4px; font-weight: 700; }
+  .drawer-action {
+    width: 100%; margin-top: 12px; padding: 11px; border: 0; border-radius: 11px;
+    background: var(--green-soft); color: var(--green-dark); cursor: pointer; font: 700 14px var(--font-body);
+  }
 
   .checklist { list-style: none; }
   .checklist li { display: flex; gap: 10px; padding: 7px 0; font-size: 14px; align-items: flex-start; }
@@ -318,6 +320,7 @@
     font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 12px; cursor: pointer;
     background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 1px 6px; color: var(--green-dark);
   }
+  .verify-status { margin-top: 12px; font-size: 13px; color: var(--ink-soft); }
   #verify-out { margin-top: 14px; }
   #verify-out .mascot-row { margin: 4px 0 0; }
   .verify-product { font-size: 14px; margin-bottom: 6px; }
@@ -371,11 +374,10 @@
     font-family: var(--font-title); font-weight: 700; font-size: 15px; padding: 12px 26px; border-radius: 99px;
   }
 
-  .result-actions { margin-top: 6px; }
-  .result-actions .btn { margin-top: 12px; }
-  .small-actions { display: flex; justify-content: center; gap: 18px; margin-top: 16px; }
-  .small-actions button {
-    background: none; border: none; color: var(--ink-soft); cursor: pointer;
+  .result-actions { margin: 2px 0 12px; }
+  .result-actions .btn { margin-top: 8px; padding: 13px; }
+  .restart-link {
+    display: block; margin: 12px auto 0; background: none; border: none; color: var(--ink-soft); cursor: pointer;
     font: 700 13px var(--font-body); text-decoration: underline; text-underline-offset: 3px;
   }
   .toast {
@@ -789,38 +791,38 @@ function computeProfile(s) {
       notices.push({
         type: "warn",
         title: "Le neuf dépasse votre budget",
-        text: "Pour rester dans votre enveloppe : MacBook reconditionné avec garantie, ou PC Windows neuf. La fiche ci-dessous vise le choix réaliste.",
+        text: "Mac neuf hors budget : visez le reconditionné garanti ou un PC Windows.",
       });
     } else if (wantsGaming && s.budget === "b1") {
       notices.push({
         type: "warn",
         title: "Sous 500 €, on joue malin",
-        text: "Pas de fausse promesse : un PC neuf équilibré avec une carte graphique dédiée n'est pas réaliste. Cette fiche vise les jeux légers ; pour les jeux récents, regardez l'occasion ou passez à 500–800 €.",
+        text: "Sous 500 €, visez les jeux légers. Pour les jeux récents : occasion ou budget 500–800 €.",
       });
     } else {
       notices.push({
         type: "warn",
         title: "J'ai ajusté la recommandation",
-        text: "Le besoin idéal commence plutôt à " + BUDGET_LABEL[minBudget] + ". La fiche ci-dessous est le meilleur compromis réaliste dans votre budget.",
+        text: "Le besoin idéal coûte plutôt " + BUDGET_LABEL[minBudget] + " ; voici le compromis réaliste.",
       });
     }
   } else if (budgetKnown && BUDGET_RANK[s.budget] >= BUDGET_RANK[minBudget] + 2) {
     notices.push({
       type: "good",
       title: "Bonne nouvelle : gardez la différence",
-      text: "Un ordinateur à " + BUDGET_LABEL[minBudget] + " couvre déjà vos besoins.",
+      text: "Vos besoins sont couverts dès " + BUDGET_LABEL[minBudget] + ".",
     });
   } else if (!budgetKnown) {
     notices.push({
       type: "good",
       title: "Votre ordre de grandeur",
-      text: "Ce profil se trouve généralement autour de " + BUDGET_LABEL[minBudget] + ".",
+      text: "Comptez environ " + BUDGET_LABEL[minBudget] + ".",
     });
   } else if (s.os === "apple" && wantsGaming) {
     notices.push({
       type: "warn",
       title: "Pour jouer, Windows reste plus simple",
-      text: "Avant de choisir un Mac, vérifiez que vos jeux existent bien sur macOS.",
+      text: "Vérifiez d'abord que vos jeux existent sur macOS.",
     });
   }
 
@@ -839,9 +841,9 @@ function computeProfile(s) {
 
   // Nom du profil
   const profileNames = [
-    "L'essentiel du quotidien",
-    "Le polyvalent fiable",
-    wantsGaming ? "Le costaud, taillé pour le jeu" : "Le costaud, taillé pour créer",
+    "L'essentiel",
+    "Le polyvalent",
+    wantsGaming ? "Le joueur costaud" : "Le créatif costaud",
   ];
   const profileName = budgetConflict
     ? (wantsGaming ? "Le joueur malin" : heavyMedia ? "Le créatif malin" : "Le compromis malin")
@@ -942,9 +944,20 @@ function engineSelfCheck() {
   const cheapGamer = computeProfile({ usage: ["gaming"], work: "heavy", mobility: "home", os: "windows", budget: "b1" });
   const regularGamer = computeProfile({ usage: ["gaming"], work: "solo", mobility: "home", os: "windows", budget: "b2" });
   const simpleAndWide = computeProfile({ usage: ["web"], work: "solo", mobility: "home", os: "windows", budget: "b4" });
+  const apiProduct = normalizeIcecatProduct({
+    EssentialInfo: { Brand: "HP", ProductName: "Test" },
+    FeaturesGroups: [{ Features: [
+      { RawValue: "AMD Ryzen™ 5", Feature: { ID: 2196 } },
+      { RawValue: "16", Feature: { ID: 11381 } },
+      { RawValue: "512", Feature: { ID: 3318 } },
+      { RawValue: "512", Feature: { ID: 5586 } },
+    ] }],
+  }, "12345678");
   return cheapGamer.band === 1 && cheapGamer.ram === 16 && cheapGamer.storageGo === 512 && cheapGamer.targets.gpu === "integrated" && cheapGamer.budgetConflict
     && regularGamer.targets.gpu === "required" && regularGamer.ram === 16 && !regularGamer.budgetConflict
-    && simpleAndWide.band === 0 && simpleAndWide.ram === 8;
+    && simpleAndWide.band === 0 && simpleAndWide.ram === 8
+    && apiProduct.specs.cpuTier === 1 && apiProduct.specs.ramGo === 16 && apiProduct.specs.storageType === "SSD"
+    && isValidGTIN(ICECAT_SAMPLE_EAN) && !isValidGTIN("0199485877786");
 }
 
 /* ---------- Fiche mémo (texte partageable) ---------- */
@@ -964,49 +977,99 @@ function memoText(p) {
   return lines.join("\n");
 }
 
-/* ---------- Source de données produit (Icecat) ----------
-   Le brief : on se base sur l'identifiant (EAN/MPN), pas sur le texte
-   de la page. Un seul moteur pour l'extension, la photo et la saisie.
+/* ---------- Source de données produit (Icecat) ---------- */
 
-   En production, fetchProductByEAN() appelle Icecat via un petit proxy
-   côté serveur (l'API Icecat exige une clé et n'est pas appelable
-   directement depuis le navigateur : clé exposée + CORS). Le proxy
-   masque la clé et renvoie le JSON normalisé ci-dessous.
-   Icecat = catalogue ouvert, inscription de base gratuite, requête par
-   EAN/UPC ou n° de pièce, XML/JSON, large couverture européenne.
-
-   Ici, pour rendre la V1 pleinement testable hors-ligne, on branche un
-   petit CATALOGUE DE DÉMONSTRATION (données fictives, clairement
-   étiquetées). Le jour où le proxy existe, seule cette fonction change. */
-
-const ICECAT_ENDPOINT = null; // ex. "/api/icecat?ean=" en production
+const ICECAT_ENDPOINT = "https://live.icecat.biz/api/";
+// ponytail: compte Icecat de démonstration ; utiliser le compte Open Icecat du projet avant trafic réel.
+const ICECAT_SHOP = "openIcecat-live";
+const ICECAT_SAMPLE_EAN = "0199485877785";
 
 const DEMO_CATALOG = {
-  "3701234500018": { brand: "PortaBook (démo)", name: "Air 14", specs: { ramGo: 16, storageGo: 512, storageType: "SSD", cpuName: "Intel Core i5-1335U", cpuTier: 1, gpuDedicated: false, os: "windows", weightKg: 1.4, screenIn: 14 } },
-  "3701234500025": { brand: "BudgetMate (démo)", name: "15", specs: { ramGo: 8, storageGo: 256, storageType: "SSD", cpuName: "Intel Core i3-1215U", cpuTier: 0, gpuDedicated: false, os: "windows", weightKg: 1.8, screenIn: 15 } },
-  "3701234500032": { brand: "OldStock (démo)", name: "15 HDD", specs: { ramGo: 8, storageGo: 1000, storageType: "HDD", cpuName: "Intel Celeron N4020", cpuTier: 0, gpuDedicated: false, os: "windows", weightKg: 2.0, screenIn: 15 } },
-  "3701234500049": { brand: "FruitBook (démo)", name: "Air 13", specs: { ramGo: 16, storageGo: 512, storageType: "SSD", cpuName: "Puce Apple série M", cpuTier: 2, gpuDedicated: false, os: "mac", weightKg: 1.24, screenIn: 13 } },
-  "3701234500056": { brand: "PlayForce (démo)", name: "16 RTX", specs: { ramGo: 32, storageGo: 1000, storageType: "SSD", cpuName: "AMD Ryzen 7", cpuTier: 2, gpuDedicated: true, os: "windows", weightKg: 2.3, screenIn: 16 } },
+  "3701234500010": { brand: "PortaBook (démo)", name: "Air 14", specs: { ramGo: 16, storageGo: 512, storageType: "SSD", cpuName: "Intel Core i5-1335U", cpuTier: 1, gpuDedicated: false, os: "windows", weightKg: 1.4, screenIn: 14 } },
+  "3701234500027": { brand: "BudgetMate (démo)", name: "15", specs: { ramGo: 8, storageGo: 256, storageType: "SSD", cpuName: "Intel Core i3-1215U", cpuTier: 0, gpuDedicated: false, os: "windows", weightKg: 1.8, screenIn: 15 } },
+  "3701234500034": { brand: "OldStock (démo)", name: "15 HDD", specs: { ramGo: 8, storageGo: 1000, storageType: "HDD", cpuName: "Intel Celeron N4020", cpuTier: 0, gpuDedicated: false, os: "windows", weightKg: 2.0, screenIn: 15 } },
+  "3701234500041": { brand: "FruitBook (démo)", name: "Air 13", specs: { ramGo: 16, storageGo: 512, storageType: "SSD", cpuName: "Puce Apple série M", cpuTier: 2, gpuDedicated: false, os: "mac", weightKg: 1.24, screenIn: 13 } },
+  "3701234500058": { brand: "PlayForce (démo)", name: "16 RTX", specs: { ramGo: 32, storageGo: 1000, storageType: "SSD", cpuName: "AMD Ryzen 7", cpuTier: 2, gpuDedicated: true, os: "windows", weightKg: 2.3, screenIn: 16 } },
 };
-const DEMO_EANS = Object.keys(DEMO_CATALOG);
-
 function cleanEAN(raw) {
   return String(raw || "").replace(/\D/g, "");
 }
 
-// Renvoie une promesse { found, product?, source } — jamais un verdict inventé.
-function fetchProductByEAN(raw) {
+function isValidGTIN(value) {
+  if (![8, 12, 13, 14].includes(value.length)) return false;
+  const digits = [...value].map(Number);
+  const check = digits.pop();
+  const sum = digits.reverse().reduce((total, digit, index) => total + digit * (index % 2 ? 1 : 3), 0);
+  return (10 - sum % 10) % 10 === check;
+}
+
+function cpuTierFromName(name) {
+  name = String(name || "").replace(/[™®]/g, "");
+  if (/Ryzen\s*[79]|Core(?:\s+Ultra)?\s*[79]|Core\s*i[79]/i.test(name)) return 2;
+  if (/Ryzen\s*5|Core(?:\s+Ultra)?\s*5|Core\s*i5/i.test(name)) return 1;
+  return name ? 0 : undefined;
+}
+
+function normalizeIcecatProduct(data, ean) {
+  const info = data.GeneralInfo || data.EssentialInfo || {};
+  const features = (data.FeaturesGroups || []).flatMap((group) => group.Features || []);
+  const byId = new Map(features.map((feature) => [String(feature.Feature && feature.Feature.ID), feature]));
+  const feature = (id) => byId.get(String(id));
+  const raw = (id) => feature(id) && feature(id).RawValue;
+  const local = (id) => feature(id) && (feature(id).LocalValue || feature(id).PresentationValue || feature(id).RawValue);
+  const number = (id) => raw(id) === undefined ? undefined : Number(raw(id));
+  const yesNo = (id) => raw(id) === undefined ? undefined : /^(Y|yes|oui|true|1)$/i.test(String(raw(id)));
+
+  const cpuName = [local(2196), local(47)].filter(Boolean).join(" ");
+  const osName = local(3233);
+  let storageGo = number(3318);
+  if (storageGo && /\b(To|TB)\b/i.test(String(local(3318)))) storageGo *= 1000;
+  let weightKg = number(94);
+  if (weightKg > 50) weightKg /= 1000;
+
+  if (!info.Brand && !info.ProductName && !info.Title) return null;
+  return {
+    ean,
+    brand: info.Brand || "",
+    name: info.ProductName || info.Title,
+    specs: {
+      ramGo: number(11381),
+      storageGo,
+      storageType: feature(5586) ? "SSD" : undefined,
+      cpuName: cpuName || undefined,
+      cpuTier: cpuTierFromName(cpuName),
+      gpuDedicated: yesNo(27905),
+      os: /mac/i.test(String(osName)) ? "mac" : /windows/i.test(String(osName)) ? "windows" : osName ? "other" : undefined,
+      osName,
+      weightKg,
+      screenIn: number(944),
+    },
+  };
+}
+
+// Renvoie { found, product?, source } — jamais un verdict inventé.
+async function fetchProductByEAN(raw) {
   const ean = cleanEAN(raw);
-  return new Promise((resolve) => {
-    if (ean.length < 8) { resolve({ found: false, reason: "format" }); return; }
-    // Point d'intégration Icecat réel (désactivé en démo) :
-    // if (ICECAT_ENDPOINT) { fetch(ICECAT_ENDPOINT + ean)... resolve(normalize(json)); return; }
-    setTimeout(() => {
-      const hit = DEMO_CATALOG[ean];
-      if (hit) resolve({ found: true, source: "démo", product: { ean, brand: hit.brand, name: hit.name, specs: hit.specs } });
-      else resolve({ found: false, reason: "unknown" });
-    }, 650);
-  });
+  if (!isValidGTIN(ean)) return { found: false, reason: "format" };
+
+  const demo = DEMO_CATALOG[ean];
+  if (demo) return { found: true, source: "démo", product: { ean, brand: demo.brand, name: demo.name, specs: demo.specs } };
+
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 7000);
+  try {
+    const url = new URL(ICECAT_ENDPOINT);
+    url.search = new URLSearchParams({ shopname: ICECAT_SHOP, lang: "fr", content: "essentialinfo,featuregroups", GTIN: ean });
+    const response = await fetch(url, { headers: { Accept: "application/json" }, signal: controller.signal });
+    if (!response.ok) return { found: false, reason: "service" };
+    const json = await response.json();
+    const product = json.msg === "OK" && json.data ? normalizeIcecatProduct(json.data, ean) : null;
+    return product ? { found: true, source: "Icecat", product } : { found: false, reason: "unknown" };
+  } catch (error) {
+    return { found: false, reason: "service" };
+  } finally {
+    clearTimeout(timeout);
+  }
 }
 
 /* Compare les specs réelles d'un produit aux cibles du profil.
@@ -1082,7 +1145,7 @@ function compareToProfile(product, targets) {
 
   // Système
   if (sp.os) {
-    const osFr = sp.os === "mac" ? "macOS (Mac)" : "Windows";
+    const osFr = sp.os === "mac" ? "macOS (Mac)" : sp.os === "windows" ? "Windows" : (sp.osName || "Autre système");
     lines.push({
       status: sp.os === targets.os ? "ok" : "low",
       label: "Système",
@@ -1405,8 +1468,7 @@ function renderComputing() {
 
 function renderResult() {
   const p = computeProfile(state);
-  let riseIdx = 0;
-  const rise = (cls) => `class="${cls || ""} rise" style="animation-delay:${(riseIdx++) * 90}ms"`;
+  const note = p.notices[0];
 
   // Persistance : garder le profil, nettoyer la session, refléter l'URL partageable.
   saveLast(state);
@@ -1420,23 +1482,25 @@ function renderResult() {
       <div class="profile-banner rise" style="animation-delay:0ms">
         <span class="pb-label">${ic("spark")} Votre résultat</span>
         <h2>${p.name}</h2>
-        <p>${p.budgetConflict ? "J'ai adapté la fiche à votre budget, sans vous vendre du rêve." : "Voici les quatre choses à retenir pour bien choisir."}</p>
-        <span class="pb-mascot mascot-pop">${mascot("up", 104)}</span>
+        <p>${note ? note.text : "Quatre repères simples pour bien choisir."}</p>
+        <span class="pb-mascot mascot-pop">${mascot("up", 88)}</span>
       </div>
 
-      ${p.notices.map((n) => `
-        <div class="notice ${n.type} rise" style="animation-delay:${(++riseIdx) * 90}ms"><strong>${n.title}</strong>${n.text}</div>`).join("")}
-
-      <div ${rise("quick-grid")}>
+      <div class="quick-list rise" style="animation-delay:70ms">
         ${p.highlights.map((h) => `
-          <div class="quick-card">
+          <div class="quick-row">
             <span class="quick-label">${h.label}</span>
             <span class="quick-value">${h.value}</span>
           </div>`).join("")}
       </div>
 
-      <details ${rise("drawer")}>
-        <summary>${ic("compass")} Comprendre ce résultat <span class="drawer-toggle" aria-hidden="true">+</span></summary>
+      <div class="result-actions">
+        <button class="btn" id="share-link">${ic("share")} Partager</button>
+        <button class="restart-link" id="restart">Recommencer</button>
+      </div>
+
+      <details class="drawer">
+        <summary>Comprendre ce résultat <span class="drawer-toggle" aria-hidden="true">+</span></summary>
         <div class="drawer-body">
           ${p.specs.map((s) => `
             <div class="spec">
@@ -1445,33 +1509,25 @@ function renderResult() {
             </div>`).join("")}
           <p class="drawer-subtitle">À vérifier avant d'acheter</p>
           <ul class="checklist">${p.checklist.map((c) => `<li><span class="cl-check">${ic("check")}</span><span>${c}</span></li>`).join("")}</ul>
+          <button class="drawer-action" id="save-memo">Enregistrer la fiche</button>
         </div>
       </details>
 
-      <details ${rise("drawer")}>
-        <summary>${ic("target")} Vérifier un ordinateur <span class="drawer-toggle" aria-hidden="true">+</span></summary>
+      <details class="drawer">
+        <summary>Vérifier un ordinateur <span class="drawer-toggle" aria-hidden="true">+</span></summary>
         <div class="drawer-body">
-          <p class="verify-intro">Saisissez le code-barres de la boîte et je compare le modèle à votre fiche.</p>
+          <p class="verify-intro">Scannez ou saisissez le code-barres de la boîte.</p>
           <div class="verify-form">
-            <input id="ean-input" inputmode="numeric" autocomplete="off" placeholder="Code-barres, ex. 3701234500018">
+            <input id="ean-input" inputmode="numeric" autocomplete="off" maxlength="14" aria-label="Code-barres EAN" placeholder="Code-barres EAN">
             <div class="verify-btns">
               ${scanSupported ? `<button class="btn secondary" id="scan-btn">${ic("camera")} Scanner</button>` : ""}
               <button class="btn" id="verify-btn">Vérifier</button>
             </div>
           </div>
-          <p class="verify-hint">Mode démo : ${DEMO_EANS.slice(0, 3).map((e) => `<code data-demo="${e}">${e}</code>`).join(" · ")}</p>
+          <p class="verify-hint">Exemple Icecat : <code data-example="${ICECAT_SAMPLE_EAN}">${ICECAT_SAMPLE_EAN}</code></p>
           <div id="verify-out"></div>
         </div>
       </details>
-
-      <div class="result-actions rise" style="animation-delay:${(++riseIdx) * 90}ms">
-        <button class="btn" id="share-link">${ic("share")} Partager ce résultat</button>
-        <div class="small-actions">
-          <button id="save-memo">Enregistrer la fiche</button>
-          <button id="restart">Recommencer</button>
-        </div>
-      </div>
-      <footer>QuelPC · Conseil indépendant · Aucun ordinateur à vendre</footer>
     </div>`;
 
   document.getElementById("restart").onclick = () => {
@@ -1489,8 +1545,8 @@ function renderResult() {
   document.getElementById("verify-btn").onclick = runVerify;
   input.addEventListener("keydown", (e) => { if (e.key === "Enter") runVerify(); });
 
-  app.querySelectorAll("code[data-demo]").forEach((c) => {
-    c.onclick = () => { input.value = c.dataset.demo; runVerify(); };
+  app.querySelectorAll("code[data-example]").forEach((c) => {
+    c.onclick = () => { input.value = c.dataset.example; runVerify(); };
   });
 
   const scanBtn = document.getElementById("scan-btn");
@@ -1500,19 +1556,16 @@ function renderResult() {
 /* Lance la vérification d'un EAN et affiche le verdict. */
 async function verifyEAN(rawEAN, targets, out) {
   const ean = cleanEAN(rawEAN);
-  if (ean.length < 8) {
-    out.innerHTML = `<div class="notice neutral"><strong>Code un peu court</strong>Le code-barres (EAN) fait en général 13 chiffres. Vérifiez la saisie.</div>`;
+  if (!isValidGTIN(ean)) {
+    out.innerHTML = `<div class="notice neutral"><strong>Code-barres invalide</strong>Vérifiez les chiffres sous les barres.</div>`;
     return;
   }
-  out.innerHTML = `<div class="mascot-row"><span class="mascot-wrap float">${mascot("think", 64)}</span><span class="bubble">Je regarde la référence…</span></div>`;
+  out.innerHTML = `<p class="verify-status">Je cherche la référence…</p>`;
 
   const res = await fetchProductByEAN(ean);
 
   if (!res.found) {
-    out.innerHTML = `
-      <div class="mascot-row"><span class="mascot-wrap">${mascot("think", 64)}</span>
-        <span class="bubble">Je n'ai pas réussi à identifier ce modèle. Plutôt que de deviner, je préfère vous le dire franchement.</span></div>
-      <div class="notice neutral" style="margin-top:12px"><strong>Modèle non trouvé</strong>Revérifiez le code sur la boîte, ou essayez le numéro de pièce fabricant. En rayon, scannez plutôt le code-barres que de recopier le nom.</div>`;
+    out.innerHTML = `<div class="notice neutral"><strong>${res.reason === "service" ? "Icecat est momentanément indisponible" : "Modèle non trouvé"}</strong>${res.reason === "service" ? "Réessayez dans un instant." : "Revérifiez le code-barres sur la boîte."}</div>`;
     return;
   }
 
