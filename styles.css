@@ -25,7 +25,7 @@ html { -webkit-text-size-adjust: 100%; background: var(--bg); }
 body {
   font-family: var(--font-body);
   background:
-    radial-gradient(circle at 8% 4%, rgba(249, 222, 139, .42) 0 70px, transparent 71px),
+    radial-gradient(circle at 8% calc(env(safe-area-inset-top) + 70px), rgba(249, 222, 139, .42) 0 70px, transparent 71px),
     radial-gradient(circle at 96% 24%, rgba(27, 138, 90, .12) 0 92px, transparent 93px),
     var(--bg);
   color: var(--ink);
@@ -85,7 +85,7 @@ svg.ic .f { fill: currentColor; fill-opacity: 1; stroke: none; }
   position: fixed; inset: 0; max-width: 480px; margin: 0 auto;
   padding: calc(12px + env(safe-area-inset-top)) 16px calc(24px + env(safe-area-inset-bottom));
   display: flex; flex-direction: column; overflow: hidden;
-  background: radial-gradient(circle at 100% 0, var(--green-soft) 0 88px, transparent 89px), var(--bg);
+  background: radial-gradient(circle at 100% calc(env(safe-area-inset-top) + 88px), var(--green-soft) 0 88px, transparent 89px), var(--bg);
 }
 .question-content { flex: 1; min-height: 0; overflow: hidden; display: flex; flex-direction: column; }
 .question-page .mascot-row { margin: clamp(7px, 1.6vh, 14px) 0 clamp(10px, 2vh, 18px); flex-shrink: 0; }
