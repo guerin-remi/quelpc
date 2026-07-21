@@ -49,7 +49,7 @@
     min-height: 100dvh;
     display: flex;
     flex-direction: column;
-    padding: 20px 20px calc(28px + env(safe-area-inset-bottom));
+    padding: 16px 16px calc(20px + env(safe-area-inset-bottom));
   }
   h1, h2, h3 { font-family: var(--font-title); line-height: 1.12; letter-spacing: -0.01em; }
 
@@ -71,7 +71,7 @@
   .t-amber  { background: var(--amber-soft);  color: var(--amber); }
 
   /* ---------- Barre de progression ---------- */
-  .topbar { display: flex; align-items: center; gap: 12px; min-height: 40px; margin-bottom: 6px; }
+  .topbar { display: flex; align-items: center; gap: 10px; min-height: 30px; margin-bottom: 6px; }
   .back-btn {
     background: none; border: none; cursor: pointer;
     font-family: var(--font-body); font-size: 14px; font-weight: 600;
@@ -92,32 +92,38 @@
     .screen, .rise, .opt-check, .float, .mascot-pop { animation: none !important; }
   }
 
-  .q-title { font-size: 26px; font-weight: 800; margin-bottom: 8px; }
-  .q-help { font-size: 15px; color: var(--ink-soft); margin-bottom: 22px; }
-
-  .options { display: flex; flex-direction: column; gap: 11px; }
-  .option {
-    display: flex; align-items: center; gap: 13px; text-align: left;
-    background: var(--card); border: 2px solid var(--line); border-radius: var(--radius);
-    padding: 13px 15px; cursor: pointer; width: 100%;
-    box-shadow: 0 3px 0 var(--line);
-    font-family: var(--font-body); font-size: 16px; color: var(--ink);
-    transition: border-color .15s, box-shadow .1s, transform .1s;
+  .question-page {
+    position: fixed; inset: 0; max-width: 480px; margin: 0 auto;
+    padding: calc(12px + env(safe-area-inset-top)) 16px calc(10px + env(safe-area-inset-bottom));
+    display: flex; flex-direction: column; overflow: hidden;
+    background: var(--bg);
   }
-  .option:active { transform: translateY(3px); box-shadow: 0 0 0 var(--line); }
-  .option.selected { border-color: var(--green); box-shadow: 0 3px 0 var(--green); }
-  .option.selected:active { box-shadow: 0 0 0 var(--green); }
+  .q-title { font-size: 23px; font-weight: 800; margin-bottom: 5px; }
+  .q-title::after { content: ""; display: block; width: 28px; height: 5px; border-radius: 9px; background: var(--coral); margin-top: 7px; }
+  .q-help { font-size: 13px; line-height: 1.35; color: var(--ink-soft); margin-bottom: 10px; }
+
+  .options { flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 7px; padding: 1px 1px 4px; scrollbar-width: thin; }
+  .option {
+    display: flex; align-items: center; gap: 10px; text-align: left; flex-shrink: 0;
+    background: var(--card); border: 2px solid transparent; border-radius: 13px;
+    padding: 8px 10px; cursor: pointer; width: 100%;
+    font-family: var(--font-body); font-size: 16px; color: var(--ink);
+    transition: border-color .15s, background .15s, transform .1s;
+  }
+  .option:active { transform: scale(.99); }
+  .option.selected { border-color: var(--green); background: var(--green-soft); }
   .opt-icon {
-    width: 44px; height: 44px; border-radius: 13px; flex-shrink: 0;
+    width: 36px; height: 36px; border-radius: 10px; flex-shrink: 0;
     display: flex; align-items: center; justify-content: center;
     transition: transform .2s cubic-bezier(.2, 1.4, .5, 1);
   }
+  .opt-icon svg.ic { width: 19px; height: 19px; }
   .option.selected .opt-icon { transform: rotate(-6deg) scale(1.08); }
   .opt-text { flex: 1; min-width: 0; }
-  .opt-label { font-weight: 700; display: block; font-size: 15.5px; }
-  .opt-sub { font-size: 13px; color: var(--ink-soft); display: block; margin-top: 1px; }
+  .opt-label { font-weight: 700; display: block; font-size: 14px; line-height: 1.25; }
+  .opt-sub { font-size: 11.5px; line-height: 1.25; color: var(--ink-soft); display: block; margin-top: 1px; }
   .opt-check {
-    width: 24px; height: 24px; border-radius: 50%; flex-shrink: 0;
+    width: 20px; height: 20px; border-radius: 50%; flex-shrink: 0;
     background: var(--green); color: #fff;
     display: flex; align-items: center; justify-content: center;
     opacity: 0; transform: scale(.4);
@@ -125,6 +131,15 @@
   .opt-check svg.ic { width: 13px; height: 13px; }
   .option.selected .opt-check { opacity: 1; animation: checkPop .3s cubic-bezier(.2, 1.6, .5, 1) forwards; }
   @keyframes checkPop { from { transform: scale(.4); } to { transform: scale(1); } }
+
+  .question-actions {
+    flex-shrink: 0; display: grid; grid-template-columns: auto 1fr; gap: 9px;
+    padding-top: 9px; background: var(--bg);
+  }
+  .question-actions .back-btn {
+    border: 2px solid var(--line); border-radius: 13px; padding: 10px 12px; background: var(--card); color: var(--ink);
+  }
+  .question-actions .btn { margin: 0; padding: 11px 16px; border-radius: 13px; font-size: 16px; }
 
   .btn {
     display: flex; align-items: center; justify-content: center; gap: 9px; width: 100%;
@@ -147,8 +162,8 @@
   .btn svg.ic { width: 19px; height: 19px; }
 
   /* ---------- Accueil ---------- */
-  .hero { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 24px 0; }
-  .logo { display: flex; align-items: center; gap: 9px; margin-bottom: 30px; }
+  .hero { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 10px 0; }
+  .logo { display: flex; align-items: center; gap: 9px; margin-bottom: 16px; }
   .logo-mark {
     width: 34px; height: 34px; border-radius: 10px; background: var(--green); color: #fff;
     display: flex; align-items: center; justify-content: center; transform: rotate(-4deg);
@@ -178,41 +193,20 @@
     transform: rotate(45deg);
   }
 
-  .hero h1 { font-size: 35px; font-weight: 800; margin-bottom: 13px; }
+  .home-mascot { display: flex; justify-content: center; margin: 2px 0 10px; }
+  .hero h1 { font-size: 31px; font-weight: 800; margin-bottom: 10px; }
   .hero h1 em {
     font-style: normal;
     background: linear-gradient(transparent 58%, #F9DE8B 58%);
     padding: 0 2px;
   }
-  .hero p.lead { font-size: 16.5px; color: var(--ink-soft); margin-bottom: 28px; }
-  .pillars { display: flex; flex-direction: column; gap: 15px; margin-bottom: 32px; }
-  .pillar { display: flex; gap: 13px; align-items: center; }
-  .pillar-icon {
-    width: 40px; height: 40px; border-radius: 12px; flex-shrink: 0;
-    display: flex; align-items: center; justify-content: center;
-  }
-  .pillar strong { display: block; font-size: 15px; }
-  .pillar span.sub { font-size: 13.5px; color: var(--ink-soft); }
-  .hero-footnote { text-align: center; font-size: 13px; color: var(--ink-soft); margin-top: 14px; }
+  .hero p.lead { font-size: 15px; color: var(--ink-soft); margin-bottom: 18px; }
+  .hero-proof { text-align: center; color: var(--green-dark); font-size: 12.5px; font-weight: 700; margin: 0 0 2px; }
 
   /* ---------- Écran de préparation ---------- */
   .computing { flex: 1; display: flex; flex-direction: column; justify-content: center; }
-  .computing .mascot-stage { display: flex; justify-content: center; margin-bottom: 16px; }
-  .computing h2 { font-size: 24px; font-weight: 800; text-align: center; margin-bottom: 30px; }
-  .compute-steps { display: flex; flex-direction: column; gap: 15px; max-width: 320px; margin: 0 auto; width: 100%; }
-  .compute-step { display: flex; align-items: center; gap: 12px; font-size: 15px; font-weight: 500; color: var(--ink-soft); opacity: .3; transition: opacity .3s, color .3s; }
-  .compute-step.active { opacity: 1; }
-  .compute-step.done { opacity: 1; color: var(--ink); }
-  .compute-bullet {
-    width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
-    border: 2.5px solid var(--line); background: var(--card);
-    display: flex; align-items: center; justify-content: center; color: #fff;
-    transition: background .25s, border-color .25s, transform .25s;
-  }
-  .compute-step.active .compute-bullet { border-color: var(--green); }
-  .compute-step.done .compute-bullet { background: var(--green); border-color: var(--green); transform: scale(1.1); }
-  .compute-bullet svg.ic { width: 14px; height: 14px; opacity: 0; transition: opacity .2s; }
-  .compute-step.done .compute-bullet svg.ic { opacity: 1; }
+  .computing .mascot-stage { display: flex; justify-content: center; margin-bottom: 10px; }
+  .computing h2 { font-size: 23px; font-weight: 800; text-align: center; }
 
   /* ---------- Résultat ---------- */
   .rise { animation: rise .45s ease backwards; }
@@ -343,15 +337,14 @@
   /* ---------- Reprise de session (accueil) ---------- */
   .resume {
     background: var(--card); border: 2px solid var(--green-border); border-radius: var(--radius);
-    padding: 14px 16px; margin-bottom: 18px; box-shadow: 0 3px 0 var(--green-border);
+    padding: 10px 12px; margin-bottom: 12px;
   }
-  .resume-top { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 15px; margin-bottom: 4px; }
+  .resume-top { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 14px; margin-bottom: 8px; }
   .resume-top svg.ic { width: 18px; height: 18px; color: var(--green-dark); }
-  .resume p { font-size: 13.5px; color: var(--ink-soft); margin-bottom: 12px; }
   .resume-actions { display: flex; gap: 10px; }
   .resume-actions button {
     flex: 1; font-family: var(--font-title); font-weight: 700; font-size: 14px; cursor: pointer;
-    border-radius: 11px; padding: 10px; border: none;
+    border-radius: 11px; padding: 8px; border: none;
   }
   .resume-actions .r-go { background: var(--green); color: #fff; }
   .resume-actions .r-new { background: var(--bg); color: var(--ink-soft); border: 2px solid var(--line); }
@@ -434,9 +427,6 @@ const ICONS = {
   bag: '<path class="d" d="M5.8 7.8 7 4.4c.2-.7.9-1.2 1.6-1.2h6.8c.7 0 1.4.5 1.6 1.2l1.2 3.4v10.4a2.6 2.6 0 0 1-2.6 2.6H8.4a2.6 2.6 0 0 1-2.6-2.6z"/><path d="M5.8 7.8h12.4M9.4 10.8a2.6 2.6 0 0 0 5.2 0"/>',
   share: '<circle class="d" cx="18" cy="5.2" r="2.8"/><circle class="d" cx="6" cy="12" r="2.8"/><circle class="d" cx="18" cy="18.8" r="2.8"/><path d="m8.6 13.3 6.8 4.1M15.4 6.6l-6.8 4"/>',
   refresh: '<path d="M3.2 12a8.8 8.8 0 0 1 15.4-5.8L21 8.4M21 3.2v5.2h-5.2M20.8 12a8.8 8.8 0 0 1-15.4 5.8L3 15.6M3 20.8v-5.2h5.2" stroke-width="2.2"/>',
-  shield: '<path class="d" d="M12 2.3 4.6 5.1a1 1 0 0 0-.7 1C4 11.6 5.1 18.4 11.6 21.5a1 1 0 0 0 .8 0C19 18.4 20.1 11.6 20.1 6a1 1 0 0 0-.7-.9z"/><path d="m8.7 12 2.3 2.3 4.3-4.5"/>',
-  bubble: '<path class="d" d="M12 3a8.6 8.6 0 0 0-7.4 13L3 21l5.2-1.5A8.6 8.6 0 1 0 12 3z"/><circle class="f" cx="8.4" cy="12" r="1.1"/><circle class="f" cx="12" cy="12" r="1.1"/><circle class="f" cx="15.6" cy="12" r="1.1"/>',
-  clock: '<circle class="d" cx="12" cy="12" r="8.8"/><path d="M12 7.2V12l3.2 1.9"/>',
   laptop: '<path class="d" d="M4.6 5.8A1.8 1.8 0 0 1 6.4 4h11.2a1.8 1.8 0 0 1 1.8 1.8v8.8H4.6z"/><path class="d" d="m3.1 17.5.7-2.9h16.4l.7 2.9a1.3 1.3 0 0 1-1.3 1.6H4.4a1.3 1.3 0 0 1-1.3-1.6z"/>',
   spark: '<path class="d" d="M12 2.8c.5 4.7 2.7 7.2 7.3 7.8v2.8c-4.6.6-6.8 3.1-7.3 7.8h-.2c-.5-4.7-2.7-7.2-7.3-7.8v-2.8c4.6-.6 6.8-3.1 7.3-7.8z"/>',
 };
@@ -455,23 +445,18 @@ const MASCOT_ARM = "#0E5E3E";
 
 const MASCOT_POSES = {
   wave:  { armL: "M28 52 Q17 58 15 67", handL: [15, 69], armR: "M92 48 Q105 39 107 25", handR: [107, 23], eyes: "normal", mouth: "smile" },
-  open:  { armL: "M28 50 Q15 55 11 63", handL: [11, 65], armR: "M92 50 Q105 55 109 63", handR: [109, 65], eyes: "wide",   mouth: "oh" },
   up:    { armL: "M28 48 Q15 38 13 24", handL: [13, 22], armR: "M92 48 Q105 38 107 24", handR: [107, 22], eyes: "joy",    mouth: "grin", sparks: true },
   think: { armL: "M28 52 Q17 58 15 67", handL: [15, 69], armR: "M92 54 Q103 66 88 67",  handR: [86, 65],  eyes: "updots", mouth: "hmm" },
-  coin:  { armL: "M28 52 Q17 58 15 67", handL: [15, 69], armR: "M92 50 Q104 48 107 42", handR: [107, 40], eyes: "normal", mouth: "smile", coin: true },
-  point: { armL: "M28 52 Q17 58 15 67", handL: [15, 69], armR: "M92 48 Q104 44 112 42", handR: [112, 42], eyes: "normal", mouth: "smile" },
 };
 
 const MASCOT_EYES = {
   normal: '<circle cx="48" cy="40" r="3.6" fill="' + MASCOT_INK + '"/><circle cx="72" cy="40" r="3.6" fill="' + MASCOT_INK + '"/><circle cx="49.2" cy="38.8" r="1.1" fill="#fff"/><circle cx="73.2" cy="38.8" r="1.1" fill="#fff"/>',
-  wide:   '<circle cx="48" cy="40" r="4.4" fill="' + MASCOT_INK + '"/><circle cx="72" cy="40" r="4.4" fill="' + MASCOT_INK + '"/><circle cx="49.4" cy="38.4" r="1.3" fill="#fff"/><circle cx="73.4" cy="38.4" r="1.3" fill="#fff"/>',
   joy:    '<path d="M44 41 Q48 36 52 41 M68 41 Q72 36 76 41" stroke="' + MASCOT_INK + '" stroke-width="2.6" fill="none" stroke-linecap="round"/>',
   updots: '<circle cx="48" cy="37" r="3.2" fill="' + MASCOT_INK + '"/><circle cx="72" cy="37" r="3.2" fill="' + MASCOT_INK + '"/><circle cx="49" cy="35.8" r="1" fill="#fff"/><circle cx="73" cy="35.8" r="1" fill="#fff"/>',
 };
 
 const MASCOT_MOUTHS = {
   smile: '<path d="M52 49 Q60 56 68 49" stroke="' + MASCOT_INK + '" stroke-width="2.5" fill="none" stroke-linecap="round"/>',
-  oh:    '<ellipse cx="60" cy="51" rx="3.8" ry="4.6" fill="' + MASCOT_INK + '"/>',
   grin:  '<path d="M50 47 Q60 59 70 47Z" fill="' + MASCOT_INK + '"/>',
   hmm:   '<path d="M53 50 L67 48" stroke="' + MASCOT_INK + '" stroke-width="2.5" fill="none" stroke-linecap="round"/>',
 };
@@ -491,7 +476,6 @@ function mascot(pose, size, cls) {
       : "")
     + arm(p.armL) + hand(p.handL)
     + arm(p.armR) + hand(p.handR)
-    + (p.coin ? '<circle cx="107" cy="30" r="8" fill="#D98A1F"/><circle cx="107" cy="30" r="4.8" fill="none" stroke="#FFF9EF" stroke-width="1.6"/>' : "")
     + '<path d="M60 16 V7" stroke="' + MASCOT_ARM + '" stroke-width="3" stroke-linecap="round"/>'
     + '<circle cx="60" cy="5.5" r="3.6" fill="#E45C35"/>'
     + '<rect x="26" y="16" width="68" height="54" rx="12" fill="#1B8A5A"/>'
@@ -504,48 +488,6 @@ function mascot(pose, size, cls) {
     + '<rect x="71" y="85" width="13" height="7" rx="3.5" fill="' + MASCOT_ARM + '"/>'
     + "</svg>";
 }
-
-/* Pose et petite phrase de Puce pour chaque question */
-const MASCOT_BY_QUESTION = {
-  usage:    { pose: "open",  quip: "On commence par la plus importante !" },
-  work:     { pose: "up",    quip: "Là, soyez honnête avec moi…" },
-  mobility: { pose: "wave",  quip: "On avance bien !" },
-  plug:     { pose: "point", quip: "Question bonus, promis c'est la seule." },
-  os:       { pose: "think", quip: "Presque fini, plus que deux." },
-  budget:   { pose: "coin",  quip: "Dernière question !" },
-};
-
-/* Réaction de Puce quand on choisit une réponse (single-select).
-   Clé par réponse, sinon réaction par défaut. Donne de la vie. */
-const MASCOT_DEFAULT_REACTION = { pose: "up", quip: "Bien reçu, on continue !" };
-const MASCOT_REACTIONS = {
-  work: {
-    solo:  { pose: "wave",  quip: "Simple et efficace, j'aime." },
-    multi: { pose: "up",    quip: "Ah, une équipe de choc à onglets ! Je note plus de mémoire." },
-    heavy: { pose: "up",    quip: "Du lourd ! On vise costaud alors." },
-  },
-  mobility: {
-    home:      { pose: "wave", quip: "Tranquille à la maison, parfait." },
-    sometimes: { pose: "wave", quip: "Un peu nomade, ça marche." },
-    daily:     { pose: "up",   quip: "Toujours dans le sac : léger, ce sera." },
-  },
-  plug: {
-    plug:   { pose: "wave", quip: "Une prise pas loin, pas de souci." },
-    noplug: { pose: "up",   quip: "Loin des prises : je muscle la batterie." },
-  },
-  os: {
-    windows: { pose: "wave",  quip: "Windows, terrain connu." },
-    apple:   { pose: "up",    quip: "L'univers Apple, joli choix." },
-    any:     { pose: "think", quip: "Pas d'avis ? Je vous prends par la main." },
-  },
-  budget: {
-    b1: { pose: "coin", quip: "Compris, on joue serré et malin." },
-    b2: { pose: "coin", quip: "Bon budget pour du solide." },
-    b3: { pose: "coin", quip: "De la marge, on va bien vous servir." },
-    b4: { pose: "up",   quip: "Large ! On vise le confort." },
-    b0: { pose: "think", quip: "Pas de souci, je vous donne un ordre d'idée." },
-  },
-};
 
 /* ---------- Définition des questions ---------- */
 
@@ -1308,7 +1250,6 @@ function renderHome() {
   const resumeBlock = hasSession ? `
     <div class="resume">
       <div class="resume-top">${ic("refresh")} Reprendre où vous en étiez ?</div>
-      <p>Vous aviez commencé le questionnaire. On continue ou on repart de zéro ?</p>
       <div class="resume-actions">
         <button class="r-go" id="resume-go">Reprendre</button>
         <button class="r-new" id="resume-new">Recommencer</button>
@@ -1316,7 +1257,6 @@ function renderHome() {
     </div>` : (last ? `
     <div class="resume">
       <div class="resume-top">${ic("compass")} Revoir votre dernier profil</div>
-      <p>On a gardé le profil de votre dernière visite.</p>
       <div class="resume-actions">
         <button class="r-go" id="see-last">Revoir mon profil</button>
         <button class="r-new" id="resume-new">Nouveau test</button>
@@ -1329,20 +1269,12 @@ function renderHome() {
         <span class="logo-mark">${ic("laptop")}</span>
         <span class="logo-name">Quel<span>PC</span></span>
       </div>
-      <div class="mascot-row">
-        <span class="mascot-wrap float mascot-pop">${mascot("wave", 108)}</span>
-        <span class="bubble">Salut, moi c'est <strong>Puce</strong> ! Dites-moi ce que vous faites, je trouve l'ordi qu'il vous faut.</span>
-      </div>
+      <div class="home-mascot"><span class="float mascot-pop">${mascot("wave", 92)}</span></div>
       <h1>Quel ordinateur est fait <em>pour vous</em> ?</h1>
-      <p class="lead">Répondez à 6 questions simples — sur votre vie, pas sur la technique. On s'occupe de traduire.</p>
+      <p class="lead">6 questions simples. Aucun jargon.</p>
       ${resumeBlock}
-      <div class="pillars">
-        <div class="pillar"><span class="pillar-icon t-green">${ic("shield")}</span><div><strong>100 % neutre</strong><span class="sub">Nous ne vendons rien. Juste un conseil honnête.</span></div></div>
-        <div class="pillar"><span class="pillar-icon t-blue">${ic("bubble")}</span><div><strong>Zéro jargon</strong><span class="sub">Aucune question technique. Promis.</span></div></div>
-        <div class="pillar"><span class="pillar-icon t-coral">${ic("clock")}</span><div><strong>Moins de 5 minutes</strong><span class="sub">Une question à la fois, et c'est réglé.</span></div></div>
-      </div>
+      <p class="hero-proof">Neutre · Gratuit · Sans compte</p>
       <button class="btn" id="start">Trouver mon ordinateur</button>
-      <p class="hero-footnote">Gratuit, sans compte, sans email.</p>
     </div>`;
 
   const start = () => { state = {}; currentStep = 0; clearSession(); screen = "question"; render(); };
@@ -1362,39 +1294,32 @@ function renderQuestion() {
   const qid = steps[currentStep];
   const q = QUESTIONS[qid];
   const selected = q.multi ? (state[qid] || []) : state[qid];
+  const isSelected = (id) => q.multi ? selected.includes(id) : selected === id;
+  const hasSelection = q.multi ? selected.length > 0 : !!selected;
 
   app.innerHTML = `
-    <div class="topbar">
-      <button class="back-btn" id="back">${ic("chevronLeft")} Retour</button>
-      <div class="progress-segs">
-        ${steps.map((_, i) => `<span class="seg ${i < currentStep ? "done" : i === currentStep ? "now" : ""}"></span>`).join("")}
+    <div class="question-page">
+      <div class="topbar">
+        <div class="progress-segs">
+          ${steps.map((_, i) => `<span class="seg ${i < currentStep ? "done" : i === currentStep ? "now" : ""}"></span>`).join("")}
+        </div>
+        <span class="step-count">${currentStep + 1}/${steps.length}</span>
       </div>
-      <span class="step-count">${currentStep + 1}/${steps.length}</span>
-    </div>
-    <div class="mascot-row" id="mascot-row">
-      <span class="mascot-wrap mascot-pop">${mascot(MASCOT_BY_QUESTION[qid].pose, 76)}</span>
-      <span class="bubble">${MASCOT_BY_QUESTION[qid].quip}</span>
-    </div>
-    <div class="screen">
       <h2 class="q-title">${q.title}</h2>
       <p class="q-help">${q.help}</p>
       <div class="options">
         ${q.options.map((o) => `
-          <button class="option ${q.multi ? (selected.includes(o.id) ? "selected" : "") : (selected === o.id ? "selected" : "")}" data-id="${o.id}">
+          <button class="option ${isSelected(o.id) ? "selected" : ""}" data-id="${o.id}" aria-pressed="${isSelected(o.id)}">
             <span class="opt-icon ${o.tint}">${ic(o.icon)}</span>
             <span class="opt-text"><span class="opt-label">${o.label}</span>${o.sub ? `<span class="opt-sub">${o.sub}</span>` : ""}</span>
             <span class="opt-check">${ic("check")}</span>
           </button>`).join("")}
       </div>
-      ${q.multi ? `<button class="btn" id="next" ${selected.length ? "" : "disabled"}>Continuer</button>` : ""}
+      <div class="question-actions">
+        <button class="back-btn" id="back">${ic("chevronLeft")} Retour</button>
+        <button class="btn" id="next" ${hasSelection ? "" : "disabled"}>Continuer</button>
+      </div>
     </div>`;
-
-  // Puce réagit : remplace pose + bulle dans la rangée mascotte.
-  const react = (pose, quip, size) => {
-    const row = document.getElementById("mascot-row");
-    if (!row) return;
-    row.innerHTML = `<span class="mascot-wrap mascot-pop">${mascot(pose, size || 76)}</span><span class="bubble">${quip}</span>`;
-  };
 
   document.getElementById("back").onclick = () => {
     if (currentStep === 0) { screen = "home"; } else { currentStep--; }
@@ -1410,60 +1335,34 @@ function renderQuestion() {
         else if (sel.length < q.max) sel = [...sel, id];
         else sel = [sel[1], id]; // remplace le plus ancien
         state[qid] = sel;
-        saveSession();
-        render();
-        // Bulle dynamique selon le nombre de choix
-        const n = (state[qid] || []).length;
-        if (n === 1) react("up", "Super. Un autre usage, ou on continue ?");
-        else if (n >= 2) react("up", "Parfait, j'ai ce qu'il me faut !");
       } else {
         state[qid] = id;
         // Nettoie les réponses des questions devenues non pertinentes
         if (qid === "mobility" && id === "home") delete state.plug;
-        btn.classList.add("selected");
-        saveSession();
-        const r = (MASCOT_REACTIONS[qid] && MASCOT_REACTIONS[qid][id]) || MASCOT_DEFAULT_REACTION;
-        react(r.pose, r.quip);
-        setTimeout(() => { currentStep++; render(); }, 620);
       }
+      saveSession();
+      const values = q.multi ? state[qid] : [state[qid]];
+      app.querySelectorAll(".option").forEach((option) => {
+        const active = values.includes(option.dataset.id);
+        option.classList.toggle("selected", active);
+        option.setAttribute("aria-pressed", active);
+      });
+      document.getElementById("next").disabled = !values.length;
     };
   });
 
-  const next = document.getElementById("next");
-  if (next) next.onclick = () => { currentStep++; render(); };
+  document.getElementById("next").onclick = () => { currentStep++; saveSession(); render(); };
 }
 
-/* Écran de préparation : les étapes se cochent l'une après l'autre,
-   puis le résultat s'affiche. Donne un moment de révélation au profil. */
 function renderComputing() {
-  const steps = [
-    "Analyse de vos usages",
-    "Calibrage de la mémoire",
-    "Vérification du budget",
-    "Rédaction de votre profil",
-  ];
   app.innerHTML = `
     <div class="screen computing">
       <div class="mascot-stage"><span class="float">${mascot("think", 110)}</span></div>
-      <h2>Je croise vos réponses…</h2>
-      <div class="compute-steps">
-        ${steps.map((s) => `
-          <div class="compute-step">
-            <span class="compute-bullet">${ic("check")}</span>
-            <span>${s}</span>
-          </div>`).join("")}
-      </div>
+      <h2>Je prépare votre fiche…</h2>
     </div>`;
 
-  const els = [...app.querySelectorAll(".compute-step")];
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const stepDelay = reduced ? 0 : 420;
-
-  els.forEach((el, i) => {
-    setTimeout(() => el.classList.add("active"), i * stepDelay);
-    setTimeout(() => el.classList.add("done"), i * stepDelay + stepDelay * 0.8);
-  });
-  setTimeout(() => { screen = "result"; render(); }, steps.length * stepDelay + 300);
+  setTimeout(() => { screen = "result"; render(); }, reduced ? 0 : 650);
 }
 
 function renderResult() {
